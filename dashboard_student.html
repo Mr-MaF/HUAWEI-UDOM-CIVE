@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - HUAWEI-UDOM Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --huawei-red: #e62928;
+            --huawei-dark-red: #c41e1d;
+            --huawei-blue: #1f69aa;
+            --huawei-light-blue: #4e93d3;
+        }
+        
+        .dark {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --bg-tertiary: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --border-color: #444444;
+        }
+        
+         :root:not(.dark) {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --border-color: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            width: 280px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
+        }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+        }
+        
+        .sidebar-overlay.show {
+            display: block;
+        }
+        
+        .nav-item {
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(230, 41, 40, 0.1), rgba(31, 105, 170, 0.1));
+            color: var(--huawei-red);
+            border-left: 4px solid var(--huawei-red);
+        }
+        
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 30px;
+            background: var(--huawei-red);
+            border-radius: 2px;
+        }
+        
+        .nav-text {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+        
+        .sidebar.collapsed .nav-badge {
+            display: none;
+        }
+        
+        .main-content {
+            transition: all 0.3s ease;
+            margin-left: 280px;
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 80px;
+        }
+        
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--huawei-red), var(--huawei-dark-red));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--huawei-dark-red), var(--huawei-red));
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(230, 41, 40, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--huawei-blue);
+            border: 2px solid var(--huawei-blue);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--huawei-blue);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .progress-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--huawei-red), var(--huawei-blue));
+            border-radius: 5px;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--huawei-red), var(--huawei-blue));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .session-timer {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+            color: #16a34a;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .toast-error {
+            background: linear-gradient(135deg, var(--huawei-red), var(--huawei-dark-red));
+        }
+        
+        .toast-info {
+            background: linear-gradient(135deg, var(--huawei-blue), var(--huawei-light-blue));
+        }
+        
+        .course-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--huawei-red), var(--huawei-blue));
+        }
+        
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .grade-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .grade-a {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .grade-b {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+            color: #2563eb;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .grade-c {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+            color: #d97706;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .stats-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s ease;
+        }
+        
+        .stats-card:hover::before {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+        
+        .notification-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .lab-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .lab-online {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .lab-busy {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+            color: #d97706;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .lab-offline {
+            background: linear-gradient(135deg, rgba(107, 114, 128, 0.1), rgba(75, 85, 99, 0.1));
+            color: #6b7280;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        
+        .track-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .track-computing {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .track-cloud-computing {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+            color: #2563eb;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .track-networking {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1));
+            color: #7c3aed;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        
+        .exam-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .exam-card:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--huawei-blue);
+        }
+        
+        .exam-card.available {
+            border-left-color: #10b981;
+        }
+        
+        .exam-card.upcoming {
+            border-left-color: #f59e0b;
+        }
+        
+        .input-field {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+        }
+        
+        .input-field:focus {
+            border-color: var(--huawei-blue);
+            box-shadow: 0 0 0 3px rgba(31, 105, 170, 0.1);
+            outline: none;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 50;
+                width: 280px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .main-content.sidebar-collapsed {
+                margin-left: 0;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar fixed top-0 left-0 h-full z-40" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo -->
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-3 shadow-lg">
+                            HU
+                        </div>
+                        <span class="nav-text text-lg font-bold whitespace-nowrap">UDOM Portal</span>
+                    </div>
+                    <button class="md:hidden text-gray-500 hover:text-gray-700" id="closeSidebar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center">
+                    <div class="user-avatar mr-3">ST</div>
+                    <div class="nav-text">
+                        <div class="font-semibold" id="userName">Student User</div>
+                        <div class="text-xs text-gray-500">Computing Track</div>
+                    </div>
+                </div>
+                <div class="session-timer mt-3">
+                    <i class="fas fa-clock mr-1"></i>
+                    <span class="nav-text">Session: <span id="sessionTimer">29:45</span></span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 p-4 overflow-y-auto">
+                <div class="mb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Learning</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item active flex items-center px-4 py-3" data-section="dashboard">
+                            <i class="fas fa-home w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="courses">
+                            <i class="fas fa-graduation-cap w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">My Courses</span>
+                            <span class="nav-badge ml-auto notification-badge nav-text">4</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="assignments">
+                            <i class="fas fa-tasks w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Assignments</span>
+                            <span class="nav-badge ml-auto notification-badge nav-text">3</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="labs">
+                            <i class="fas fa-flask w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Virtual Labs</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="grades">
+                            <i class="fas fa-chart-line w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Grades & Progress</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Examinations</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="available-exams">
+                            <i class="fas fa-clipboard-list w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Available Exams</span>
+                            <span class="nav-badge ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full nav-text">2</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="exam-results">
+                            <i class="fas fa-chart-bar w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">My Results</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="exam-history">
+                            <i class="fas fa-history w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Exam History</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="practice-tests">
+                            <i class="fas fa-dumbbell w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Practice Tests</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" onclick="openExamSystem()">
+                            <i class="fas fa-external-link-alt w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Full Exam System</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Resources</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="materials">
+                            <i class="fas fa-book w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Study Materials</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="certificates">
+                            <i class="fas fa-certificate w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Certificates</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="calendar">
+                            <i class="fas fa-calendar w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Schedule</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="library">
+                            <i class="fas fa-book-open w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Digital Library</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Support</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="help">
+                            <i class="fas fa-question-circle w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Help & FAQ</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="issues">
+                            <i class="fas fa-exclamation-circle w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Report Issue</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="profile">
+                            <i class="fas fa-user w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Profile Settings</span>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout -->
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <button class="w-full flex items-center justify-center px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-colors" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span class="nav-text">Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Top Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center">
+                    <button class="md:hidden mr-4 text-gray-600 hover:text-gray-800" id="openSidebar">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <button class="hidden md:block mr-4 text-gray-600 hover:text-gray-800" id="toggleSidebar">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold">Student Dashboard</h1>
+                        <p class="text-sm text-gray-500">Welcome back! Ready to continue learning?</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute -top-1 -right-1 notification-badge">3</span>
+                    </button>
+
+                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" id="darkModeToggle">
+                        <i class="fas fa-moon" id="darkModeIcon"></i>
+                    </button>
+
+                    <a href="index.html" class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" title="Home">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="p-6">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section fade-in">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-red-500 text-white rounded-2xl p-8 mb-8 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-black opacity-10"></div>
+                    <div class="relative z-10 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2">Welcome back, Student!</h2>
+                            <p class="text-blue-100 text-lg">Ready to continue your learning journey?</p>
+                            <div class="mt-4 flex items-center space-x-4">
+                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
+                                    <i class="fas fa-fire mr-1"></i> 7-day streak
+                                </span>
+                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
+                                    <i class="fas fa-trophy mr-1"></i> Top 10% performer
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-4xl font-bold">75%</div>
+                            <div class="text-sm text-blue-100">Overall Progress</div>
+                            <div class="w-32 h-2 bg-white bg-opacity-30 rounded-full mt-2">
+                                <div class="w-3/4 h-full bg-white rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-graduation-cap text-2xl text-blue-600"></i>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-blue-600">4</div>
+                                <div class="text-sm text-gray-500">Active Courses</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-green-600">
+                            <i class="fas fa-arrow-up mr-1"></i>1 new this week
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clipboard-list text-2xl text-orange-600"></i>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-orange-600">2</div>
+                                <div class="text-sm text-gray-500">Available Exams</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-red-600">
+                            <i class="fas fa-clock mr-1"></i>1 due soon
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-trophy text-2xl text-green-600"></i>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-green-600">B+</div>
+                                <div class="text-sm text-gray-500">Average Grade</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-green-600">
+                            <i class="fas fa-arrow-up mr-1"></i>Improved 5%
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clock text-2xl text-purple-600"></i>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-purple-600">28h</div>
+                                <div class="text-sm text-gray-500">Study Time</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-purple-600">
+                            <i class="fas fa-calendar mr-1"></i>This week
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Courses and Recent Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Current Courses -->
+                    <div class="lg:col-span-2">
+                        <div class="card p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-semibold">Current Courses</h3>
+                                <button class="btn-primary text-sm px-4 py-2" onclick="showSection('courses')">View All</button>
+                            </div>
+                            <div class="space-y-6">
+                                <div class="course-card p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center">
+                                                <i class="fas fa-code text-2xl text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-semibold text-lg">Python Programming Fundamentals</h4>
+                                                <p class="text-sm text-gray-500">Computing Track • Dr. Smith</p>
+                                                <div class="flex items-center mt-2">
+                                                    <i class="fas fa-users text-xs text-gray-400 mr-1"></i>
+                                                    <span class="text-xs text-gray-500">240 students</span>
+                                                    <span class="mx-2 text-gray-300">•</span>
+                                                    <i class="fas fa-clock text-xs text-gray-400 mr-1"></i>
+                                                    <span class="text-xs text-gray-500">12 weeks</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="grade-badge grade-a">A-</span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="flex justify-between text-sm mb-2">
+                                            <span>Progress</span>
+                                            <span class="font-semibold">85%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 85%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm text-gray-600">Next: Lab 5 - Data Structures</p>
+                                            <p class="text-xs text-gray-500">Due in 3 days</p>
+                                        </div>
+                                        <button class="btn-primary text-sm px-4 py-2">Continue</button>
+                                    </div>
+                                </div>
+
+                                <div class="course-card p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center">
+                                                <i class="fas fa-shield-alt text-2xl text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-semibold text-lg">Network Security Basics</h4>
+                                                <p class="text-sm text-gray-500">Networking Track • Prof. Johnson</p>
+                                                <div class="flex items-center mt-2">
+                                                    <i class="fas fa-users text-xs text-gray-400 mr-1"></i>
+                                                    <span class="text-xs text-gray-500">180 students</span>
+                                                    <span class="mx-2 text-gray-300">•</span>
+                                                    <i class="fas fa-clock text-xs text-gray-400 mr-1"></i>
+                                                    <span class="text-xs text-gray-500">10 weeks</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="grade-badge grade-b">B+</span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="flex justify-between text-sm mb-2">
+                                            <span>Progress</span>
+                                            <span class="font-semibold">72%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 72%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm text-gray-600">Next: Assignment 3 - Firewall Config</p>
+                                            <p class="text-xs text-gray-500">Due in 5 days</p>
+                                        </div>
+                                        <button class="btn-primary text-sm px-4 py-2">Continue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming & Quick Actions -->
+                    <div class="space-y-6">
+                        <!-- Upcoming Deadlines -->
+                        <div class="card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Upcoming Deadlines</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center p-3 bg-red-50 dark:bg-red-900 rounded-xl border border-red-200 dark:border-red-800">
+                                    <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                        2
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium">Python Assignment 4</p>
+                                        <p class="text-xs text-gray-500">Due in 2 days</p>
+                                    </div>
+                                    <i class="fas fa-clock text-red-500"></i>
+                                </div>
+
+                                <div class="flex items-center p-3 bg-orange-50 dark:bg-orange-900 rounded-xl border border-orange-200 dark:border-orange-800">
+                                    <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                                        5
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium">Network Security Exam</p>
+                                        <p class="text-xs text-gray-500">Due in 5 days</p>
+                                    </div>
+                                    <i class="fas fa-clipboard-list text-orange-500"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="card p-6">
+                            <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
+                            <div class="space-y-3">
+                                <button class="w-full btn-primary flex items-center justify-center py-3" onclick="showSection('available-exams')">
+                                    <i class="fas fa-clipboard-list mr-2"></i>
+                                    View Available Exams
+                                </button>
+                                <button class="w-full btn-primary flex items-center justify-center py-3" onclick="showSection('labs')">
+                                    <i class="fas fa-play mr-2"></i>
+                                    Join Virtual Lab
+                                </button>
+                                <button class="w-full btn-primary flex items-center justify-center py-3" onclick="showSection('materials')">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Download Materials
+                                </button>
+                                <button class="w-full btn-primary flex items-center justify-center py-3" onclick="showSection('calendar')">
+                                    <i class="fas fa-calendar mr-2"></i>
+                                    View Schedule
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Achievement Badge -->
+                        <div class="card p-6 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900 dark:to-orange-900">
+                            <div class="text-center">
+                                <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-medal text-2xl text-white"></i>
+                                </div>
+                                <h4 class="font-semibold mb-2">Achievement Unlocked!</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Coding Enthusiast - Complete 5 programming labs</p>
+                                <button class="btn-primary text-sm px-4 py-2" onclick="showSection('certificates')">View All Badges</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Exams Section -->
+            <div id="available-exams-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Available Examinations</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Track-specific examinations with AI proctoring and blockchain verification</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button class="btn-secondary" onclick="refreshExams()">
+                                <i class="fas fa-sync-alt mr-2"></i>Refresh
+                            </button>
+                            <button class="btn-primary" onclick="openExamSystem()">
+                                <i class="fas fa-external-link-alt mr-2"></i>Full Exam System
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- System Requirements Check -->
+                    <div class="card p-4 mb-6 bg-blue-50 dark:bg-blue-900 border-blue-200 dark:border-blue-800">
+                        <h3 class="font-semibold mb-3 text-blue-800 dark:text-blue-200">Pre-Exam System Check</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Camera Access</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Microphone Access</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Internet Connection</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Available Exams -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="availableExams">
+                        <!-- Computing Track Exam -->
+                        <div class="exam-card card p-6 available">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2">Advanced Python Programming Assessment</h3>
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <span class="track-badge track-computing">Computing Track</span>
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Available Now</span>
+                                    </div>
+                                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                        <span><i class="fas fa-clock mr-1"></i>120 minutes</span>
+                                        <span><i class="fas fa-trophy mr-1"></i>150 marks</span>
+                                        <span><i class="fas fa-robot mr-1"></i>AI Proctored</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                <p><strong>Start:</strong> April 15, 2024 at 10:00 AM</p>
+                                <p><strong>End:</strong> April 15, 2024 at 12:00 PM</p>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="flex items-center space-x-4 text-sm">
+                                    <div class="flex items-center text-green-600"><i class="fas fa-robot mr-1"></i>AI Monitoring</div>
+                                    <div class="flex items-center text-purple-600"><i class="fas fa-link mr-1"></i>Blockchain Secured</div>
+                                    <div class="flex items-center text-blue-600"><i class="fas fa-fingerprint mr-1"></i>Biometric Auth</div>
+                                </div>
+                            </div>
+
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Comprehensive assessment covering advanced Python concepts, data structures, and algorithms.</p>
+
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm">
+                                    <span class="text-gray-500">25 questions</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="btn-secondary text-sm px-4 py-2" onclick="showExamPreview('exam1')">
+                                        <i class="fas fa-eye mr-2"></i>Preview
+                                    </button>
+                                    <button class="btn-primary" onclick="startExam('exam1')">
+                                        <i class="fas fa-play mr-2"></i>Start Exam
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Networking Track Exam -->
+                        <div class="exam-card card p-6 upcoming">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2">Network Security Protocols</h3>
+                                    <div class="flex items-center space-x-2 mb-2">
+                                        <span class="track-badge track-networking">Networking Track</span>
+                                        <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Upcoming</span>
+                                    </div>
+                                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                        <span><i class="fas fa-clock mr-1"></i>75 minutes</span>
+                                        <span><i class="fas fa-trophy mr-1"></i>80 marks</span>
+                                        <span><i class="fas fa-robot mr-1"></i>AI Proctored</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                <p><strong>Start:</strong> April 17, 2024 at 9:00 AM</p>
+                                <p><strong>End:</strong> April 17, 2024 at 10:15 AM</p>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="flex items-center space-x-4 text-sm">
+                                    <div class="flex items-center text-green-600"><i class="fas fa-robot mr-1"></i>AI Monitoring</div>
+                                    <div class="flex items-center text-purple-600"><i class="fas fa-link mr-1"></i>Blockchain Secured</div>
+                                    <div class="flex items-center text-blue-600"><i class="fas fa-fingerprint mr-1"></i>Biometric Auth</div>
+                                </div>
+                            </div>
+
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Examination on security protocols, firewall configurations, and network protection strategies.</p>
+
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm">
+                                    <span class="text-gray-500">20 questions</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="btn-secondary text-sm px-4 py-2" onclick="showExamPreview('exam3')">
+                                        <i class="fas fa-eye mr-2"></i>Preview
+                                    </button>
+                                    <button class="btn-primary opacity-50 cursor-not-allowed" disabled>
+                                        <i class="fas fa-calendar mr-2"></i>Scheduled
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Courses Section -->
+            <div id="courses-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">My Courses</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Manage your enrolled courses and track progress</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <select class="input-field">
+                                <option>All Tracks</option>
+                                <option>Computing</option>
+                                <option>Networking</option>
+                                <option>Cloud Computing</option>
+                                <option>Innovation</option>
+                            </select>
+                            <button class="btn-primary">Browse Courses</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Course Card 1 -->
+                        <div class="course-card overflow-hidden">
+                            <div class="h-48 bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center relative">
+                                <i class="fas fa-code text-6xl text-white opacity-80"></i>
+                                <div class="absolute top-4 right-4 bg-white bg-opacity-20 px-2 py-1 rounded-full">
+                                    <span class="text-white text-xs font-medium">Advanced</span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-semibold text-lg mb-2">Python Programming Fundamentals</h3>
+                                <p class="text-sm text-gray-500 mb-4">Learn the basics of Python programming with hands-on projects and real-world applications</p>
+
+                                <div class="flex items-center text-sm text-gray-500 mb-4">
+                                    <i class="fas fa-user mr-2"></i>
+                                    <span class="mr-4">Dr. Smith</span>
+                                    <i class="fas fa-clock mr-2"></i>
+                                    <span>12 weeks</span>
+                                </div>
+
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-sm text-gray-500">Progress: 85%</span>
+                                    <span class="grade-badge grade-a">A-</span>
+                                </div>
+
+                                <div class="progress-bar mb-4">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 btn-primary text-sm py-2">Continue Learning</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <i class="fas fa-bookmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course Card 2 -->
+                        <div class="course-card overflow-hidden">
+                            <div class="h-48 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center relative">
+                                <i class="fas fa-shield-alt text-6xl text-white opacity-80"></i>
+                                <div class="absolute top-4 right-4 bg-white bg-opacity-20 px-2 py-1 rounded-full">
+                                    <span class="text-white text-xs font-medium">Intermediate</span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-semibold text-lg mb-2">Network Security Basics</h3>
+                                <p class="text-sm text-gray-500 mb-4">Understanding cybersecurity fundamentals and network protection protocols</p>
+
+                                <div class="flex items-center text-sm text-gray-500 mb-4">
+                                    <i class="fas fa-user mr-2"></i>
+                                    <span class="mr-4">Prof. Johnson</span>
+                                    <i class="fas fa-clock mr-2"></i>
+                                    <span>10 weeks</span>
+                                </div>
+
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-sm text-gray-500">Progress: 72%</span>
+                                    <span class="grade-badge grade-b">B+</span>
+                                </div>
+
+                                <div class="progress-bar mb-4">
+                                    <div class="progress-fill" style="width: 72%"></div>
+                                </div>
+
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 btn-primary text-sm py-2">Continue Learning</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <i class="fas fa-bookmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Course Card 3 -->
+                        <div class="course-card overflow-hidden">
+                            <div class="h-48 bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center relative">
+                                <i class="fas fa-cloud text-6xl text-white opacity-80"></i>
+                                <div class="absolute top-4 right-4 bg-white bg-opacity-20 px-2 py-1 rounded-full">
+                                    <span class="text-white text-xs font-medium">Beginner</span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="font-semibold text-lg mb-2">Cloud Computing Essentials</h3>
+                                <p class="text-sm text-gray-500 mb-4">AWS, Azure, and modern cloud technologies for scalable applications</p>
+
+                                <div class="flex items-center text-sm text-gray-500 mb-4">
+                                    <i class="fas fa-user mr-2"></i>
+                                    <span class="mr-4">Dr. Williams</span>
+                                    <i class="fas fa-clock mr-2"></i>
+                                    <span>8 weeks</span>
+                                </div>
+
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-sm text-gray-500">Progress: 58%</span>
+                                    <span class="grade-badge grade-c">C+</span>
+                                </div>
+
+                                <div class="progress-bar mb-4">
+                                    <div class="progress-fill" style="width: 58%"></div>
+                                </div>
+
+                                <div class="flex space-x-2">
+                                    <button class="flex-1 btn-primary text-sm py-2">Continue Learning</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <i class="fas fa-bookmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assignments Section -->
+            <div id="assignments-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Assignments & Tasks</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Track your assignments and submission deadlines</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <select class="input-field">
+                                <option>All Status</option>
+                                <option>Pending</option>
+                                <option>Submitted</option>
+                                <option>Graded</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Pending Assignments -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4 text-red-600 flex items-center">
+                                <i class="fas fa-clock mr-2"></i> Pending Assignments (3)
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="border border-red-200 dark:border-red-800 rounded-xl p-6 bg-red-50 dark:bg-red-900">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h4 class="font-semibold text-lg">Python Assignment 4: Data Structures</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Python Programming • Dr. Smith</p>
+                                        </div>
+                                        <span class="text-sm text-red-600 font-medium bg-red-100 dark:bg-red-800 px-2 py-1 rounded-full">Due in 2 days</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                        Implement stack, queue, and linked list data structures with comprehensive testing
+                                    </p>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <span class="text-sm text-gray-500">Weight: 15% • 100 points</span>
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-file-alt mr-1"></i>
+                                            <span>3 files to submit</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="btn-primary flex-1">Start Assignment</button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <i class="fas fa-download mr-2"></i>Instructions
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="border border-orange-200 dark:border-orange-800 rounded-xl p-6 bg-orange-50 dark:bg-orange-900">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h4 class="font-semibold text-lg">Network Security Quiz</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Network Security • Prof. Johnson</p>
+                                        </div>
+                                        <span class="text-sm text-orange-600 font-medium bg-orange-100 dark:bg-orange-800 px-2 py-1 rounded-full">Due in 5 days</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                        Quiz on firewall configurations and intrusion detection systems
+                                    </p>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <span class="text-sm text-gray-500">Weight: 10% • 50 points</span>
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            <span>60 minutes</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="btn-primary flex-1">Take Quiz</button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <i class="fas fa-book mr-2"></i>Study Guide
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Completed Assignments -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4 text-green-600 flex items-center">
+                                <i class="fas fa-check-circle mr-2"></i> Completed Assignments
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="border border-green-200 dark:border-green-800 rounded-xl p-6 bg-green-50 dark:bg-green-900">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h4 class="font-semibold text-lg">Python Assignment 3: Functions</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Python Programming • Dr. Smith</p>
+                                        </div>
+                                        <span class="grade-badge grade-a">A- (92%)</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                        Create reusable functions for common programming tasks
+                                    </p>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <span class="text-sm text-gray-500">Submitted 3 days ago</span>
+                                        <div class="flex items-center text-sm text-green-600">
+                                            <i class="fas fa-check mr-1"></i>
+                                            <span>Graded</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="btn-primary flex-1">View Feedback</button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <i class="fas fa-download mr-2"></i>Download
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="border border-blue-200 dark:border-blue-800 rounded-xl p-6 bg-blue-50 dark:bg-blue-900">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h4 class="font-semibold text-lg">Network Basics Quiz</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Network Security • Prof. Johnson</p>
+                                        </div>
+                                        <span class="grade-badge grade-b">B+ (87%)</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                        OSI model and TCP/IP fundamentals assessment
+                                    </p>
+                                    <div class="flex justify-between items-center mb-4">
+                                        <span class="text-sm text-gray-500">Completed 1 week ago</span>
+                                        <div class="flex items-center text-sm text-blue-600">
+                                            <i class="fas fa-chart-line mr-1"></i>
+                                            <span>Above Average</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <button class="btn-primary flex-1">Review Results</button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <i class="fas fa-redo mr-2"></i>Retake
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Virtual Labs Section -->
+            <div id="labs-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Virtual Labs</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Access hands-on learning environments and practice your skills</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                <span class="text-sm text-gray-500">Lab servers online</span>
+                            </div>
+                            <button class="btn-primary">Request New Lab</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Active Lab -->
+                        <div class="card p-6 border-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mr-3">
+                                        <i class="fas fa-code text-xl text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold">Python Development Lab</h3>
+                                        <p class="text-sm text-gray-500">Active session</p>
+                                    </div>
+                                </div>
+                                <span class="lab-status lab-online">Online</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Full Python development environment with Jupyter notebooks, VS Code, and debugging tools
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-sm">
+                                    <span class="text-green-600 font-medium">Connected</span>
+                                    <span class="text-gray-500 mx-2">•</span>
+                                    <span class="text-gray-500">2h 15m remaining</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary flex-1">Access Lab</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Available Lab -->
+                        <div class="card p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mr-3">
+                                        <i class="fas fa-network-wired text-xl text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold">Network Simulator</h3>
+                                        <p class="text-sm text-gray-500">Available</p>
+                                    </div>
+                                </div>
+                                <span class="lab-status lab-online">Ready</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Cisco Packet Tracer and GNS3 for network configuration and troubleshooting
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-sm text-gray-500">
+                                    <i class="fas fa-users mr-1"></i>
+                                    <span>12/20 users</span>
+                                    <span class="mx-2">•</span>
+                                    <span>Ready to launch</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary flex-1">Launch Lab</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Limited Time Lab -->
+                        <div class="card p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-xl flex items-center justify-center mr-3">
+                                        <i class="fas fa-cloud text-xl text-orange-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold">AWS Cloud Lab</h3>
+                                        <p class="text-sm text-gray-500">Limited time</p>
+                                    </div>
+                                </div>
+                                <span class="lab-status lab-busy">Busy</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                AWS Free Tier sandbox for cloud computing practice with EC2, S3, and Lambda
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-sm">
+                                    <span class="text-orange-600 font-medium">2h remaining</span>
+                                    <span class="text-gray-500 mx-2">•</span>
+                                    <span class="text-gray-500">Queue: 3 students</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary flex-1">Join Queue</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Maintenance Lab -->
+                        <div class="card p-6 opacity-60">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center mr-3">
+                                        <i class="fas fa-server text-xl text-gray-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold">Cybersecurity Lab</h3>
+                                        <p class="text-sm text-gray-500">Maintenance</p>
+                                    </div>
+                                </div>
+                                <span class="lab-status lab-offline">Offline</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Penetration testing and vulnerability assessment environment
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-sm text-gray-500">
+                                    <i class="fas fa-tools mr-1"></i>
+                                    <span>Scheduled maintenance</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary flex-1 opacity-50 cursor-not-allowed" disabled>Unavailable</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <i class="fas fa-bell"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lab Usage Statistics -->
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-clock text-2xl text-purple-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-lg mb-2">28 Hours</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Total lab time this month</p>
+                        </div>
+
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-flask text-2xl text-blue-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-lg mb-2">12 Labs</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Completed this semester</p>
+                        </div>
+
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-trophy text-2xl text-green-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-lg mb-2">95%</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Lab completion rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grades & Progress Section -->
+            <div id="grades-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Grades & Progress</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Track your academic performance and learning progress</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <select class="input-field">
+                                <option>Current Semester</option>
+                                <option>Previous Semester</option>
+                                <option>All Time</option>
+                            </select>
+                            <button class="btn-primary">Generate Transcript</button>
+                        </div>
+                    </div>
+
+                    <!-- Overall Performance -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div class="card p-6 text-center">
+                            <div class="text-3xl font-bold text-green-600 mb-2">3.4</div>
+                            <div class="text-sm text-gray-500">Current GPA</div>
+                            <div class="text-xs text-green-600 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>+0.2 this semester
+                            </div>
+                        </div>
+
+                        <div class="card p-6 text-center">
+                            <div class="text-3xl font-bold text-blue-600 mb-2">B+</div>
+                            <div class="text-sm text-gray-500">Average Grade</div>
+                            <div class="text-xs text-blue-600 mt-1">
+                                <i class="fas fa-chart-line mr-1"></i>Trending up
+                            </div>
+                        </div>
+
+                        <div class="card p-6 text-center">
+                            <div class="text-3xl font-bold text-purple-600 mb-2">18</div>
+                            <div class="text-sm text-gray-500">Credits Earned</div>
+                            <div class="text-xs text-purple-600 mt-1">
+                                <i class="fas fa-graduation-cap mr-1"></i>75% to degree
+                            </div>
+                        </div>
+
+                        <div class="card p-6 text-center">
+                            <div class="text-3xl font-bold text-orange-600 mb-2">95%</div>
+                            <div class="text-sm text-gray-500">Attendance Rate</div>
+                            <div class="text-xs text-orange-600 mt-1">
+                                <i class="fas fa-calendar-check mr-1"></i>Excellent
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Grades -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4">Current Courses Performance</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                                        <th class="text-left py-3 px-4 font-semibold">Course</th>
+                                        <th class="text-left py-3 px-4 font-semibold">Instructor</th>
+                                        <th class="text-left py-3 px-4 font-semibold">Progress</th>
+                                        <th class="text-left py-3 px-4 font-semibold">Current Grade</th>
+                                        <th class="text-left py-3 px-4 font-semibold">Credits</th>
+                                        <th class="text-left py-3 px-4 font-semibold">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                                        <td class="py-4 px-4">
+                                            <div>
+                                                <div class="font-semibold">Python Programming Fundamentals</div>
+                                                <div class="text-sm text-gray-500">CSC 101</div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4">Dr. Smith</td>
+                                        <td class="py-4 px-4">
+                                            <div class="w-32">
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span>85%</span>
+                                                </div>
+                                                <div class="progress-bar h-2">
+                                                    <div class="progress-fill h-full" style="width: 85%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="grade-badge grade-a">A- (92%)</span>
+                                        </td>
+                                        <td class="py-4 px-4">4</td>
+                                        <td class="py-4 px-4">
+                                            <button class="text-blue-600 hover:underline text-sm">View Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                                        <td class="py-4 px-4">
+                                            <div>
+                                                <div class="font-semibold">Network Security Basics</div>
+                                                <div class="text-sm text-gray-500">NET 201</div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4">Prof. Johnson</td>
+                                        <td class="py-4 px-4">
+                                            <div class="w-32">
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span>72%</span>
+                                                </div>
+                                                <div class="progress-bar h-2">
+                                                    <div class="progress-fill h-full" style="width: 72%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="grade-badge grade-b">B+ (87%)</span>
+                                        </td>
+                                        <td class="py-4 px-4">3</td>
+                                        <td class="py-4 px-4">
+                                            <button class="text-blue-600 hover:underline text-sm">View Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-gray-100 dark:border-gray-700">
+                                        <td class="py-4 px-4">
+                                            <div>
+                                                <div class="font-semibold">Cloud Computing Essentials</div>
+                                                <div class="text-sm text-gray-500">CLD 150</div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4">Dr. Williams</td>
+                                        <td class="py-4 px-4">
+                                            <div class="w-32">
+                                                <div class="flex justify-between text-sm mb-1">
+                                                    <span>58%</span>
+                                                </div>
+                                                <div class="progress-bar h-2">
+                                                    <div class="progress-fill h-full" style="width: 58%"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="grade-badge grade-c">C+ (78%)</span>
+                                        </td>
+                                        <td class="py-4 px-4">3</td>
+                                        <td class="py-4 px-4">
+                                            <button class="text-blue-600 hover:underline text-sm">View Details</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add all remaining sections here: exam-results, exam-history, practice-tests, materials, certificates, calendar, library, help, issues, profile -->
+            <!-- I'll add just a couple more key sections to show the pattern -->
+
+            <!-- Study Materials Section -->
+            <div id="materials-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Study Materials</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Access course materials, textbooks, and resources</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <input type="search" placeholder="Search materials..." class="input-field">
+                            <select class="input-field">
+                                <option>All Types</option>
+                                <option>Videos</option>
+                                <option>PDFs</option>
+                                <option>Presentations</option>
+                                <option>Code Examples</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Material Card 1 -->
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-xl flex items-center justify-center mr-3">
+                                    <i class="fas fa-file-pdf text-xl text-red-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">Python Fundamentals Guide</h3>
+                                    <p class="text-sm text-gray-500">PDF • 45 pages</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Comprehensive guide covering Python basics, data types, and control structures
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">Updated 2 days ago</span>
+                                <span class="text-sm text-gray-500">2.3 MB</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary flex-1 text-sm">Download</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Material Card 2 -->
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mr-3">
+                                    <i class="fas fa-play text-xl text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">Network Security Lecture</h3>
+                                    <p class="text-sm text-gray-500">Video • 1h 32m</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                In-depth lecture on firewall configurations and network protection strategies
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">Watched 45 minutes</span>
+                                <span class="text-sm text-gray-500">HD Quality</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary flex-1 text-sm">Continue Watching</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Material Card 3 -->
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center mr-3">
+                                    <i class="fas fa-code text-xl text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">Python Code Examples</h3>
+                                    <p class="text-sm text-gray-500">ZIP • 15 files</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Collection of Python code examples and practice exercises for assignments
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-sm text-gray-500">Added yesterday</span>
+                                <span class="text-sm text-gray-500">1.1 MB</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="btn-primary flex-1 text-sm">Download</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add remaining sections: certificates, calendar, library, help, issues, profile -->
+            <!-- For brevity, I'll include just the key exam-related sections in the complete code -->
+
+            <!-- Exam Results Section -->
+            <div id="exam-results-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">My Exam Results</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Your personal examination results and performance analytics</p>
+                            <div class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 p-3 rounded-lg mt-2">
+                                <i class="fas fa-lock mr-2"></i>
+                                <span class="text-sm">These results are private to your account</span>
+                            </div>
+                        </div>
+                        <button onclick="exportResults()" class="btn-primary">
+                            <i class="fas fa-download mr-2"></i>Export Results
+                        </button>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Exam</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Track</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Score</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Grade</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">Python Programming Fundamentals</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="track-badge track-computing">Computing</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">March 10, 2024</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">92%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">A-</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                                Passed
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">Database Management</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="track-badge track-computing">Computing</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">February 28, 2024</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">88%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">B+</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                                Passed
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exam History Section -->
+            <div id="exam-history-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Exam History</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Complete history of all your examinations</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <select class="input-field">
+                                <option>All Tracks</option>
+                                <option>Computing</option>
+                                <option>Networking</option>
+                                <option>Cloud Computing</option>
+                            </select>
+                            <button class="btn-primary">Generate Report</button>
+                        </div>
+                    </div>
+
+                    <!-- Exam History Timeline -->
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-green-600"></i>
+                            </div>
+                            <div class="flex-1 card p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-semibold">Python Programming Fundamentals</h3>
+                                    <span class="grade-badge grade-a">A- (92%)</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500 mb-2">
+                                    <span>March 10, 2024</span>
+                                    <span class="track-badge track-computing">Computing</span>
+                                    <span>2 hours</span>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Comprehensive assessment covering advanced Python concepts and algorithms.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-blue-600"></i>
+                            </div>
+                            <div class="flex-1 card p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="font-semibold">Database Management Systems</h3>
+                                    <span class="grade-badge grade-b">B+ (88%)</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500 mb-2">
+                                    <span>February 28, 2024</span>
+                                    <span class="track-badge track-computing">Computing</span>
+                                    <span>1.5 hours</span>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">SQL queries, database design, and normalization principles.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Practice Tests Section -->
+            <div id="practice-tests-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Practice Tests</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Prepare for your exams with practice sessions</p>
+                        </div>
+                        <button class="btn-primary">
+                            <i class="fas fa-plus mr-2"></i>Create Custom Practice
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Practice Test 1 -->
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mr-3">
+                                    <i class="fas fa-code text-xl text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">Python Practice Quiz</h3>
+                                    <p class="text-sm text-gray-500">15 questions • 30 minutes</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Test your knowledge of Python fundamentals with this comprehensive practice quiz.
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="track-badge track-computing">Computing</span>
+                                <span class="text-sm text-gray-500">Beginner</span>
+                            </div>
+                            <button class="btn-primary w-full">Start Practice</button>
+                        </div>
+
+                        <!-- Practice Test 2 -->
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center mr-3">
+                                    <i class="fas fa-shield-alt text-xl text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">Network Security Basics</h3>
+                                    <p class="text-sm text-gray-500">20 questions • 45 minutes</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Practice security protocols, firewall configurations, and threat detection.
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="track-badge track-networking">Networking</span>
+                                <span class="text-sm text-gray-500">Intermediate</span>
+                            </div>
+                            <button class="btn-primary w-full">Start Practice</button>
+                        </div>
+
+                        <!-- Practice Test 3 -->
+                        <div class="card p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mr-3">
+                                    <i class="fas fa-cloud text-xl text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold">Cloud Computing Essentials</h3>
+                                    <p class="text-sm text-gray-500">12 questions • 25 minutes</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                AWS, Azure fundamentals and cloud service deployment strategies.
+                            </p>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="track-badge track-cloud-computing">Cloud Computing</span>
+                                <span class="text-sm text-gray-500">Advanced</span>
+                            </div>
+                            <button class="btn-primary w-full">Start Practice</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add placeholder sections for remaining items -->
+            <div id="certificates-section" class="section hidden fade-in">
+                <div class="card p-6 text-center">
+                    <h2 class="text-2xl font-bold mb-4">Certificates & Achievements</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Your certificates and achievements will appear here.</p>
+                </div>
+            </div>
+
+            <div id="calendar-section" class="section hidden fade-in">
+                <div class="card p-6 text-center">
+                    <h2 class="text-2xl font-bold mb-4">Academic Calendar</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Your schedule and academic calendar will appear here.</p>
+                </div>
+            </div>
+
+            <div id="library-section" class="section hidden fade-in">
+                <div class="card p-6 text-center">
+                    <h2 class="text-2xl font-bold mb-4">Digital Library</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Access to digital books and resources will appear here.</p>
+                </div>
+            </div>
+
+            <div id="help-section" class="section hidden fade-in">
+                <div class="card p-6 text-center">
+                    <h2 class="text-2xl font-bold mb-4">Help & FAQ</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Help documentation and frequently asked questions will appear here.</p>
+                </div>
+            </div>
+
+            <div id="issues-section" class="section hidden fade-in">
+                <div class="card p-6 text-center">
+                    <h2 class="text-2xl font-bold mb-4">Report Issue</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Issue reporting form will appear here.</p>
+                </div>
+            </div>
+
+            <div id="profile-section" class="section hidden fade-in">
+                <div class="card p-6 text-center">
+                    <h2 class="text-2xl font-bold mb-4">Profile Settings</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Your profile settings and account management will appear here.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAuth();
+            initializeSidebar();
+            initializeDarkMode();
+            initializeSessionTimer();
+            initializeNotifications();
+            initializeInteractiveElements();
+            loadExamData();
+        });
+
+        // Authentication check
+        function initializeAuth() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+            if (!isAuthenticated || currentUser.role !== 'student') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update user info
+            document.getElementById('userName').textContent = currentUser.name || 'Student User';
+        }
+
+        // Load exam data
+        function loadExamData() {
+            // Sample exam data
+            const examData = {
+                availableExams: 2,
+                completedExams: 5,
+                averageScore: 89,
+                upcomingExams: [{
+                    id: 'exam1',
+                    title: 'Advanced Python Programming Assessment',
+                    track: 'computing',
+                    date: '2024-04-15',
+                    duration: 120,
+                    status: 'available'
+                }, {
+                    id: 'exam2',
+                    title: 'Network Security Protocols',
+                    track: 'networking',
+                    date: '2024-04-17',
+                    duration: 75,
+                    status: 'upcoming'
+                }]
+            };
+
+            // Store exam data
+            localStorage.setItem('studentExamData', JSON.stringify(examData));
+        }
+
+        // Enhanced sidebar functionality
+        function initializeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const openSidebar = document.getElementById('openSidebar');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const toggleSidebar = document.getElementById('toggleSidebar');
+
+            // Mobile sidebar toggle
+            openSidebar ? .addEventListener('click', () => {
+                sidebar.classList.remove('mobile-hidden');
+                sidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeSidebar ? .addEventListener('click', () => {
+                sidebar.classList.add('mobile-hidden');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+
+            sidebarOverlay ? .addEventListener('click', () => {
+                sidebar.classList.add('mobile-hidden');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+
+            // Desktop sidebar toggle (collapse/expand)
+            toggleSidebar ? .addEventListener('click', () => {
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                if (isCollapsed) {
+                    sidebar.classList.remove('collapsed');
+                    mainContent.classList.remove('sidebar-collapsed');
+                    localStorage.setItem('sidebarCollapsed', 'false');
+                } else {
+                    sidebar.classList.add('collapsed');
+                    mainContent.classList.add('sidebar-collapsed');
+                    localStorage.setItem('sidebarCollapsed', 'true');
+                }
+            });
+
+            // Restore sidebar state
+            const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
+            if (sidebarCollapsed === 'true') {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('sidebar-collapsed');
+            }
+
+            // Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active class from all items
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    // Add active class to clicked item
+                    item.classList.add('active');
+
+                    // Show corresponding section
+                    const section = item.dataset.section;
+                    if (section) {
+                        showSection(section);
+                    }
+
+                    // Close mobile sidebar after navigation
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.add('mobile-hidden');
+                        sidebarOverlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('mobile-hidden');
+                    sidebarOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Initialize mobile state
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('mobile-hidden');
+            }
+        }
+
+        // Section switching with animation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('fade-in');
+            });
+
+            // Show selected section with animation
+            const targetSection = document.getElementById(`${sectionName}-section`);
+            if (targetSection) {
+                setTimeout(() => {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('fade-in');
+                }, 150);
+            }
+
+            // Update page title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'courses': 'My Courses',
+                'assignments': 'Assignments',
+                'labs': 'Virtual Labs',
+                'grades': 'Grades & Progress',
+                'materials': 'Study Materials',
+                'certificates': 'Certificates',
+                'calendar': 'Calendar',
+                'library': 'Digital Library',
+                'help': 'Help & FAQ',
+                'issues': 'Report Issue',
+                'profile': 'Profile Settings',
+                'available-exams': 'Available Exams',
+                'exam-results': 'My Exam Results',
+                'exam-history': 'Exam History',
+                'practice-tests': 'Practice Tests'
+            };
+
+            document.title = `${titles[sectionName] || 'Student Dashboard'} - HUAWEI-UDOM Portal`;
+        }
+
+        // Dark mode
+        function initializeDarkMode() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+
+            // Check saved preference
+            const savedDarkMode = localStorage.getItem('darkMode');
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+                darkModeIcon.className = 'fas fa-sun';
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                    darkModeIcon.className = 'fas fa-sun';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    darkModeIcon.className = 'fas fa-moon';
+                }
+            });
+
+            darkModeToggle ? .addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                darkModeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                localStorage.setItem('darkMode', isDark);
+            });
+        }
+
+        // Session timer (30 minutes)
+        function initializeSessionTimer() {
+            let timeLeft = 30 * 60; // 30 minutes in seconds
+            const timerElement = document.getElementById('sessionTimer');
+
+            const timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                // Warning at 5 minutes
+                if (timeLeft === 5 * 60) {
+                    showToast('Session will expire in 5 minutes. Save your work!', 'info');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showToast('Session expired. Please login again.', 'error');
+                    setTimeout(() => {
+                        localStorage.removeItem('isAuthenticated');
+                        localStorage.removeItem('currentUser');
+                        window.location.href = 'login.html';
+                    }, 2000);
+                }
+
+                timeLeft--;
+            }, 1000);
+
+            // Extend session on user activity
+            let lastActivity = Date.now();
+            const resetTimer = () => {
+                lastActivity = Date.now();
+                timeLeft = Math.max(timeLeft, 5 * 60); // Ensure at least 5 minutes left
+            };
+
+            document.addEventListener('mousemove', resetTimer);
+            document.addEventListener('keypress', resetTimer);
+            document.addEventListener('scroll', resetTimer);
+            document.addEventListener('click', resetTimer);
+        }
+
+        // Notifications
+        function initializeNotifications() {
+            // Simulate real-time notifications
+            const notifications = [{
+                message: 'New exam available: Advanced Python Programming',
+                type: 'info',
+                delay: 5000
+            }, {
+                message: 'Exam reminder: Network Security Protocols in 2 days',
+                type: 'info',
+                delay: 12000
+            }];
+
+            notifications.forEach(notification => {
+                setTimeout(() => {
+                    showToast(notification.message, notification.type);
+                }, notification.delay);
+            });
+
+            // Notification button click handler
+            document.getElementById('notificationBtn') ? .addEventListener('click', function() {
+                showNotificationModal();
+            });
+        }
+
+        // Interactive elements
+        function initializeInteractiveElements() {
+            // Progress bars animation on scroll
+            const observerOptions = {
+                threshold: 0.5
+            };
+
+            const progressObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const progressBars = entry.target.querySelectorAll('.progress-fill');
+                        progressBars.forEach(bar => {
+                            const width = bar.style.width;
+                            bar.style.width = '0%';
+                            setTimeout(() => {
+                                bar.style.width = width;
+                            }, 100);
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.card').forEach(card => {
+                progressObserver.observe(card);
+            });
+
+            // Button hover effects
+            document.querySelectorAll('.btn-primary').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Card hover effects
+            document.querySelectorAll('.course-card, .stats-card, .exam-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        }
+
+        // Exam system integration functions
+        function openExamSystem() {
+            // Store current user data for exam system
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+            // Set exam system authentication
+            localStorage.setItem('examSystemAuth', 'true');
+            localStorage.setItem('examSystemUser', JSON.stringify({
+                ...currentUser,
+                fromDashboard: true
+            }));
+
+            // Open exam system in same window
+            window.location.href = 'exam_system.html';
+        }
+
+        function startExam(examId) {
+            showCustomConfirm(
+                'Start Exam',
+                'Are you ready to start this examination? Make sure you have a stable internet connection and your environment is ready for proctoring.',
+                () => {
+                    // Redirect to exam system with specific exam
+                    localStorage.setItem('startExamId', examId);
+                    openExamSystem();
+                }
+            );
+        }
+
+        function showExamPreview(examId) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-2xl w-full mx-4 max-h-96 overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">Exam Preview</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-semibold mb-4">Advanced Python Programming Assessment</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span>Duration:</span>
+                                <span>120 minutes</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total Questions:</span>
+                                <span>25</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total Marks:</span>
+                                <span>150</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Passing Score:</span>
+                                <span>60%</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                            <h5 class="font-medium mb-2">Topics Covered:</h5>
+                            <ul class="text-sm list-disc list-inside space-y-1">
+                                <li>Advanced data structures</li>
+                                <li>Object-oriented programming</li>
+                                <li>Algorithm complexity</li>
+                                <li>Error handling and debugging</li>
+                                <li>File operations and databases</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">
+                        <button class="btn-secondary" onclick="this.closest('.fixed').remove()">Close</button>
+                        <button class="btn-primary" onclick="this.closest('.fixed').remove(); startExam('${examId}')">Start Exam</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function refreshExams() {
+            showToast('Refreshing available exams...', 'info');
+            // Simulate refresh
+            setTimeout(() => {
+                showToast('Exams refreshed successfully!', 'success');
+            }, 1500);
+        }
+
+        function exportResults() {
+            showToast('Exporting exam results...', 'info');
+            // Simulate export
+            setTimeout(() => {
+                showToast('Results exported successfully!', 'success');
+            }, 1500);
+        }
+
+        // Notification modal
+        function showNotificationModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full mx-4 max-h-96 overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">Notifications</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 overflow-y-auto">
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                                <i class="fas fa-clipboard-list text-blue-600 mt-1"></i>
+                                <div>
+                                    <p class="font-medium">New Exam Available</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Advanced Python Programming Assessment</p>
+                                    <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-3 bg-orange-50 dark:bg-orange-900 rounded-lg">
+                                <i class="fas fa-clock text-orange-600 mt-1"></i>
+                                <div>
+                                    <p class="font-medium">Exam Reminder</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Network Security Protocols exam in 2 days</p>
+                                    <p class="text-xs text-gray-500 mt-1">5 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900 rounded-lg">
+                                <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                                <div>
+                                    <p class="font-medium">Result Published</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Database Management exam result: B+ (88%)</p>
+                                    <p class="text-xs text-gray-500 mt-1">1 day ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+                        <button class="w-full btn-primary text-sm">View All Notifications</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Toast notifications
+        function showToast(message, type = 'info') {
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} mr-2"></i>
+                    <span class="flex-1">${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Auto remove after 6 seconds
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 6000);
+        }
+
+        // Custom confirm dialog
+        function showCustomConfirm(title, message, onConfirm) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-question-circle text-2xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">${title}</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-6">${message}</p>
+                        <div class="flex justify-center space-x-3">
+                            <button class="px-6 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onclick="this.closest('.fixed').remove()">Cancel</button>
+                            <button class="px-6 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg transition-colors" onclick="this.closest('.fixed').remove(); (${onConfirm})()">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn') ? .addEventListener('click', () => {
+            showCustomConfirm(
+                'Logout Confirmation',
+                'Are you sure you want to logout?',
+                () => {
+                    localStorage.removeItem('isAuthenticated');
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('sidebarCollapsed');
+                    localStorage.removeItem('examSystemAuth');
+                    localStorage.removeItem('examSystemUser');
+                    showToast('Logged out successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1000);
+                }
+            );
+        });
+
+        // Smooth scrolling for internal links
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(e.target.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + B to toggle sidebar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                e.preventDefault();
+                document.getElementById('toggleSidebar') ? .click();
+            }
+
+            // Ctrl/Cmd + D to toggle dark mode
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                e.preventDefault();
+                document.getElementById('darkModeToggle') ? .click();
+            }
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            const loadTime = performance.now();
+            console.log(`Dashboard loaded in ${Math.round(loadTime)}ms`);
+
+            // Show performance toast for slow loads
+            if (loadTime > 3000) {
+                showToast('Dashboard loaded successfully', 'success');
+            }
+        });
+    </script>
+</body>
+
+</html>

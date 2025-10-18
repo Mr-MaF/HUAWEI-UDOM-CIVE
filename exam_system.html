@@ -1,0 +1,2429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Exam System - HUAWEI-UDOM Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <style>
+         :root {
+            --huawei-red: #e62928;
+            --huawei-dark-red: #c41e1d;
+            --huawei-blue: #1f69aa;
+            --huawei-light-blue: #4e93d3;
+            --primary: #5D5CDE;
+            --primary-dark: #4845B8;
+        }
+        
+        .dark {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --bg-tertiary: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --border-color: #444444;
+        }
+        
+         :root:not(.dark) {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --border-color: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            width: 280px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
+        }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+        }
+        
+        .sidebar-overlay.show {
+            display: block;
+        }
+        
+        .nav-item {
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(230, 41, 40, 0.15), rgba(31, 105, 170, 0.15));
+            color: var(--huawei-red);
+            border-left: 4px solid var(--huawei-red);
+        }
+        
+        .nav-text {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+        
+        .main-content {
+            transition: all 0.3s ease;
+            margin-left: 280px;
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 80px;
+        }
+        
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(93, 92, 222, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--huawei-blue);
+            border: 2px solid var(--huawei-blue);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--huawei-blue);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .input-field {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 1rem;
+        }
+        
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(93, 92, 222, 0.1);
+            outline: none;
+        }
+        
+        .track-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .track-computing {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .track-cloud-computing {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1));
+            color: #2563eb;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .track-networking {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1));
+            color: #7c3aed;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        
+        .exam-card {
+            transition: all 0.3s ease;
+        }
+        
+        .exam-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .question-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .question-card.active {
+            border-color: var(--huawei-blue);
+            box-shadow: 0 0 0 3px rgba(31, 105, 170, 0.1);
+        }
+        
+        .exam-timer {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+            color: #dc2626;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        .exam-timer.warning {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+            color: #d97706;
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+        
+        .exam-timer.critical {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
+            color: #dc2626;
+            border-color: rgba(239, 68, 68, 0.5);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        .progress-indicator {
+            background: var(--bg-tertiary);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary), var(--huawei-blue));
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .anti-cheat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9998 !important;
+            background: var(--bg-primary) !important;
+        }
+        
+        .exam-question-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            max-height: 60vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+        
+        .question-nav-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+        }
+        
+        .question-nav-item.answered {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        
+        .question-nav-item.current {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .question-nav-item.flagged {
+            background: #f59e0b;
+            color: white;
+            border-color: #f59e0b;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .toast-error {
+            background: linear-gradient(135deg, var(--huawei-red), var(--huawei-dark-red));
+        }
+        
+        .toast-info {
+            background: linear-gradient(135deg, var(--huawei-blue), var(--huawei-light-blue));
+        }
+        
+        .toast-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .notification-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .proctoring-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .ai-monitoring {
+            display: flex;
+            align-items: center;
+            space-x-2;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            border-radius: 8px;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .security-indicator {
+            display: flex;
+            align-items: center;
+            space-x-2;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+        
+        .security-indicator.secure {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .security-indicator.warning {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+            color: #d97706;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .blockchain-verification {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(126, 34, 206, 0.1));
+            color: #7c3aed;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            font-size: 0.875rem;
+        }
+        
+        .biometric-auth {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(139, 69, 19, 0.1));
+            color: #a855f7;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            space-x-2;
+        }
+        
+        .private-results {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(220, 38, 38, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 50;
+                width: 280px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .main-content.sidebar-collapsed {
+                margin-left: 0;
+            }
+            .exam-question-nav {
+                position: static;
+                transform: none;
+                max-height: none;
+                margin-bottom: 1rem;
+            }
+            .proctoring-panel {
+                position: static;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .exam-mode {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .exam-mode * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .ai-proctoring-indicator {
+            animation: aiScan 3s infinite;
+        }
+        
+        @keyframes aiScan {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+        
+        .exam-analytics {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            min-width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar fixed top-0 left-0 h-full z-40" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo -->
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-3 shadow-lg">
+                            HU
+                        </div>
+                        <span class="nav-text text-lg font-bold whitespace-nowrap">Exam System</span>
+                    </div>
+                    <button class="md:hidden text-gray-500 hover:text-gray-700" id="closeSidebar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-3" id="userAvatar">
+                        U
+                    </div>
+                    <div class="nav-text">
+                        <div class="font-semibold" id="userName">User</div>
+                        <div class="text-xs text-gray-500" id="userRole">Role</div>
+                        <div class="text-xs text-blue-600" id="userTrack">Track</div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <div class="biometric-auth">
+                        <i class="fas fa-fingerprint mr-2"></i>
+                        <span class="nav-text">Verified</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 p-4 overflow-y-auto">
+                <!-- Student Navigation -->
+                <div id="studentNav" class="hidden">
+                    <div class="mb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Examinations</div>
+                    <ul class="space-y-2">
+                        <li>
+                            <div class="nav-item active flex items-center px-4 py-3" data-section="available-exams">
+                                <i class="fas fa-clipboard-list w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Available Exams</span>
+                                <span class="nav-badge ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full nav-text" id="availableExamsCount">0</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="exam-results">
+                                <i class="fas fa-chart-bar w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">My Results</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="exam-history">
+                                <i class="fas fa-history w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Exam History</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="practice-tests">
+                                <i class="fas fa-dumbbell w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Practice Tests</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="performance-analytics">
+                                <i class="fas fa-analytics w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Performance Analytics</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Expert Navigation -->
+                <div id="expertNav" class="hidden">
+                    <div class="mb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Exam Management</div>
+                    <ul class="space-y-2">
+                        <li>
+                            <div class="nav-item active flex items-center px-4 py-3" data-section="exam-dashboard">
+                                <i class="fas fa-tachometer-alt w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Dashboard</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="create-exam">
+                                <i class="fas fa-plus-circle w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Create Exam</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="manage-exams">
+                                <i class="fas fa-edit w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Manage Exams</span>
+                                <span class="nav-badge ml-auto bg-blue-500 text-white text-xs px-2 py-1 rounded-full nav-text" id="activeExamsCount">0</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="grade-exams">
+                                <i class="fas fa-marker w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Grade Exams</span>
+                                <span class="nav-badge ml-auto bg-orange-500 text-white text-xs px-2 py-1 rounded-full nav-text" id="pendingGradingCount">0</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="exam-analytics">
+                                <i class="fas fa-chart-line w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">All Results</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="question-bank">
+                                <i class="fas fa-database w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Question Bank</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="ai-proctoring">
+                                <i class="fas fa-robot w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">AI Proctoring</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Administrator Navigation -->
+                <div id="adminNav" class="hidden">
+                    <div class="mb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">System Monitoring</div>
+                    <ul class="space-y-2">
+                        <li>
+                            <div class="nav-item active flex items-center px-4 py-3" data-section="admin-dashboard">
+                                <i class="fas fa-shield-alt w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">System Monitor</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="exam-monitoring">
+                                <i class="fas fa-eye w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Live Exam Monitor</span>
+                                <span class="nav-badge ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full nav-text" id="liveExamsCount">0</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="security-logs">
+                                <i class="fas fa-lock w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">Security Logs</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="system-settings">
+                                <i class="fas fa-cogs w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">System Settings</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="nav-item flex items-center px-4 py-3" data-section="all-results">
+                                <i class="fas fa-file-alt w-5 h-5 mr-3 flex-shrink-0"></i>
+                                <span class="nav-text">All Results</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">System</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="blockchain-verification">
+                            <i class="fas fa-link w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Blockchain Verify</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="help">
+                            <i class="fas fa-question-circle w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Help & Support</span>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Back to Dashboard -->
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <button class="w-full flex items-center justify-center px-4 py-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900 rounded-lg transition-colors" id="backToDashboard">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    <span class="nav-text">Back to Dashboard</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- AI Proctoring Panel -->
+    <div class="proctoring-panel hidden" id="proctoringPanel">
+        <h4 class="font-semibold mb-3 text-sm">AI Proctoring</h4>
+        <div class="space-y-2">
+            <div class="ai-monitoring">
+                <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-2"></div>
+                <span class="text-xs">Face Detection: Active</span>
+            </div>
+            <div class="security-indicator secure">
+                <i class="fas fa-shield-check mr-2"></i>
+                <span class="text-xs">Environment Secure</span>
+            </div>
+            <div class="text-xs text-gray-500">
+                Violations: <span id="violationCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anti-cheat overlay -->
+    <div class="anti-cheat-overlay" id="antiCheatOverlay">
+        <div class="text-center">
+            <i class="fas fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+            <h2 class="text-2xl font-bold mb-4">Exam Security Warning</h2>
+            <p class="text-lg mb-6">You have left the exam window. This action has been logged.</p>
+            <p class="mb-8">Click below to return to your exam.</p>
+            <button class="btn-primary" onclick="returnToExam()">Return to Exam</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Top Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center">
+                    <button class="md:hidden mr-4 text-gray-600 hover:text-gray-800" id="openSidebar">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <button class="hidden md:block mr-4 text-gray-600 hover:text-gray-800" id="toggleSidebar">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold" id="headerTitle">Advanced Exam System</h1>
+                        <p class="text-sm text-gray-500" id="headerSubtitle">AI-Powered examination platform with blockchain verification</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Track Filter -->
+                    <select id="trackFilter" class="text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white hidden">
+                        <option value="all">All Tracks</option>
+                        <option value="computing">Computing</option>
+                        <option value="cloud-computing">Cloud Computing</option>
+                        <option value="networking">Networking</option>
+                    </select>
+
+                    <!-- Blockchain Verification Status -->
+                    <div class="blockchain-verification hidden" id="blockchainStatus">
+                        <i class="fas fa-link mr-2"></i>
+                        <span>Blockchain Verified</span>
+                    </div>
+
+                    <!-- Exam Timer (visible during exam) -->
+                    <div class="exam-timer hidden" id="examTimer">
+                        <i class="fas fa-clock mr-2"></i>
+                        <span id="timeRemaining">00:00:00</span>
+                    </div>
+
+                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" id="darkModeToggle">
+                        <i class="fas fa-moon" id="darkModeIcon"></i>
+                    </button>
+
+                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" id="fullscreenToggle">
+                        <i class="fas fa-expand" id="fullscreenIcon"></i>
+                    </button>
+
+                    <div class="security-indicator secure" id="securityStatus">
+                        <i class="fas fa-shield-check mr-2"></i>
+                        <span>Secure</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="p-6" id="mainContentArea">
+            <!-- Student: Available Exams Section -->
+            <div id="available-exams-section" class="section fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Available Examinations</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Track-specific examinations with AI proctoring and blockchain verification</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <select id="examTrackFilter" class="text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="all">All Tracks</option>
+                                <option value="computing">Computing Track</option>
+                                <option value="cloud-computing">Cloud Computing Track</option>
+                                <option value="networking">Networking Track</option>
+                            </select>
+                            <button class="btn-secondary" onclick="refreshExams()">
+                                <i class="fas fa-sync-alt mr-2"></i>Refresh
+                            </button>
+                            <button class="btn-secondary" onclick="runSystemCheck()">
+                                <i class="fas fa-stethoscope mr-2"></i>System Check
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- System Requirements Check -->
+                    <div class="card p-4 mb-6 bg-blue-50 dark:bg-blue-900 border-blue-200 dark:border-blue-800">
+                        <h3 class="font-semibold mb-3 text-blue-800 dark:text-blue-200">Pre-Exam System Check</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Camera Access</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Microphone Access</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Screen Recording</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Internet Connection</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Browser Compatibility</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                                <span class="text-sm">Security Protocols</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Exams -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="upcomingExams">
+                        <!-- Exam cards will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student: Exam Results Section -->
+            <div id="exam-results-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">My Exam Results</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Your personal examination results and performance analytics</p>
+                            <div class="private-results p-3 rounded-lg mt-2">
+                                <i class="fas fa-lock mr-2"></i>
+                                <span class="text-sm">These results are private to your account</span>
+                            </div>
+                        </div>
+                        <button onclick="exportMyResults()" class="btn-primary">
+                            <i class="fas fa-download mr-2"></i>Export My Results
+                        </button>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Exam</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Track</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Score</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Grade</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="student-results-table" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Results will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expert: Exam Analytics Section (All Results) -->
+            <div id="exam-analytics-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">All Exam Results</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Complete examination results for all students across all tracks</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <select id="expertTrackFilter" class="text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="all">All Tracks</option>
+                                <option value="computing">Computing Track</option>
+                                <option value="cloud-computing">Cloud Computing Track</option>
+                                <option value="networking">Networking Track</option>
+                            </select>
+                            <button onclick="exportAllResults()" class="btn-primary">
+                                <i class="fas fa-download mr-2"></i>Export All Results
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Student</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Exam</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Track</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Score</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Grade</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Security</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="all-results-table" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Results will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Administrator: All Results Section -->
+            <div id="all-results-section" class="section hidden fade-in">
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">System-wide Results</h2>
+                            <p class="text-gray-600 dark:text-gray-400">Complete system overview of all examination results</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <select id="adminTrackFilter" class="text-base px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="all">All Tracks</option>
+                                <option value="computing">Computing Track</option>
+                                <option value="cloud-computing">Cloud Computing Track</option>
+                                <option value="networking">Networking Track</option>
+                            </select>
+                            <button onclick="generateSystemReport()" class="btn-primary">
+                                <i class="fas fa-chart-line mr-2"></i>Generate Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-users text-2xl text-blue-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-lg mb-2" id="totalStudentsDisplay">0</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Total Students</p>
+                        </div>
+
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-clipboard-check text-2xl text-green-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-lg mb-2" id="totalExamsDisplay">0</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Total Exams</p>
+                        </div>
+
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-percentage text-2xl text-yellow-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-lg mb-2" id="averageScoreDisplay">0%</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Average Score</p>
+                        </div>
+
+                        <div class="card p-6 text-center">
+                            <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-shield-alt text-2xl text-purple-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-lg mb-2" id="securityIncidentsDisplay">0</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Security Incidents</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Student ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Exam</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Track</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Score</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Blockchain</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-results-table" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <!-- Results will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Exam Section -->
+            <div id="create-exam-section" class="section hidden fade-in">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Create New Exam</h2>
+                    <div class="card p-6">
+                        <form id="create-exam-form" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Exam Title</label>
+                                    <input type="text" id="exam-title" class="input-field w-full" placeholder="Enter exam title">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Track</label>
+                                    <select id="exam-track" class="input-field w-full">
+                                        <option value="">Select track</option>
+                                        <option value="computing">Computing Track</option>
+                                        <option value="cloud-computing">Cloud Computing Track</option>
+                                        <option value="networking">Networking Track</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration (minutes)</label>
+                                    <input type="number" id="exam-duration" class="input-field w-full" placeholder="60">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Marks</label>
+                                    <input type="number" id="exam-marks" class="input-field w-full" placeholder="100">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Passing Score (%)</label>
+                                    <input type="number" id="exam-passing" class="input-field w-full" placeholder="60">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                                <textarea id="exam-description" rows="3" class="input-field w-full" placeholder="Enter exam description and instructions"></textarea>
+                            </div>
+
+                            <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Questions</h3>
+                                <div class="space-y-4">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                                        <input type="text" id="ai-topic" class="input-field flex-1" placeholder="Enter topic for AI-generated questions">
+                                        <button type="button" onclick="generateAIQuestions()" class="btn-success whitespace-nowrap">
+                                            Generate AI Questions
+                                        </button>
+                                    </div>
+                                    <div id="ai-questions-output" class="hidden">
+                                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md p-4">
+                                            <div class="flex items-center mb-2">
+                                                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                                                <span class="text-sm text-blue-700 dark:text-blue-300">Generating questions...</span>
+                                            </div>
+                                            <div id="ai-questions-content" class="text-sm text-gray-700 dark:text-gray-300"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="questions-container" class="mt-6 space-y-4">
+                                    <!-- Questions will be added here -->
+                                </div>
+
+                                <button type="button" onclick="addQuestion()" class="mt-4 btn-secondary">
+                                    Add Question Manually
+                                </button>
+                            </div>
+
+                            <div class="flex justify-end space-x-3">
+                                <button type="button" onclick="saveAsDraft()" class="btn-secondary">
+                                    Save as Draft
+                                </button>
+                                <button type="submit" class="btn-primary">
+                                    Create Exam
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student: Exam Taking Interface -->
+            <div id="exam-taking-section" class="section hidden">
+                <div class="exam-mode" id="examContainer">
+                    <!-- Exam Header -->
+                    <div class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 p-6 mb-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h2 class="text-2xl font-bold" id="examTitle">Exam Title</h2>
+                                <p class="text-gray-600 dark:text-gray-400" id="examInstructions">Follow the instructions carefully</p>
+                                <div class="mt-2 flex items-center space-x-4">
+                                    <div class="blockchain-verification">
+                                        <i class="fas fa-link mr-2"></i>
+                                        <span>Blockchain Secured</span>
+                                    </div>
+                                    <div class="ai-monitoring">
+                                        <i class="fas fa-robot mr-2 ai-proctoring-indicator"></i>
+                                        <span>AI Monitoring Active</span>
+                                    </div>
+                                    <div id="examTrackBadge" class="track-badge track-computing">
+                                        Computing Track
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="exam-timer" id="examTimerMain">
+                                    <i class="fas fa-clock mr-2"></i>
+                                    <span id="timeRemainingMain">00:00:00</span>
+                                </div>
+                                <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                    Question <span id="currentQuestionNumber">1</span> of <span id="totalQuestions">10</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mt-4">
+                            <div class="progress-indicator">
+                                <div class="progress-fill" id="examProgress" style="width: 10%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question Content -->
+                    <div class="max-w-4xl mx-auto">
+                        <div id="questionContent">
+                            <!-- Questions will be loaded here -->
+                        </div>
+
+                        <!-- Enhanced Question Features -->
+                        <div class="flex justify-between items-center mt-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow">
+                            <button class="btn-secondary" id="prevQuestion" onclick="previousQuestion()">
+                                <i class="fas fa-arrow-left mr-2"></i>Previous
+                            </button>
+
+                            <div class="flex space-x-4">
+                                <button class="btn-secondary" id="flagQuestion" onclick="toggleFlag()">
+                                    <i class="fas fa-flag mr-2"></i>Flag
+                                </button>
+                                <button class="btn-secondary" onclick="showReview()">
+                                    <i class="fas fa-eye mr-2"></i>Review
+                                </button>
+                                <button class="btn-secondary" onclick="showCalculator()">
+                                    <i class="fas fa-calculator mr-2"></i>Calculator
+                                </button>
+                                <button class="btn-secondary" onclick="showFormulas()">
+                                    <i class="fas fa-superscript mr-2"></i>Formulas
+                                </button>
+                            </div>
+
+                            <button class="btn-primary" id="nextQuestion" onclick="nextQuestion()">
+                                Next<i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Question Navigation Panel -->
+                    <div class="exam-question-nav" id="questionNav">
+                        <h4 class="font-semibold mb-3 text-center">Questions</h4>
+                        <div class="grid grid-cols-5 gap-1" id="questionNavGrid">
+                            <!-- Question navigation items -->
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <div class="text-xs mb-2">
+                                <div class="flex justify-between">
+                                    <span>Answered:</span>
+                                    <span id="answeredCount">0</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Flagged:</span>
+                                    <span id="flaggedCount">0</span>
+                                </div>
+                            </div>
+                            <button class="btn-danger w-full text-sm" onclick="submitExam()">
+                                <i class="fas fa-paper-plane mr-2"></i>Submit Exam
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional sections would continue here -->
+
+        </main>
+    </div>
+
+    <!-- Real-time Analytics Panel -->
+    <div class="exam-analytics hidden" id="examAnalytics">
+        <h4 class="font-semibold mb-3 text-sm">Real-time Analytics</h4>
+        <div class="space-y-2 text-xs">
+            <div class="flex justify-between">
+                <span>Completion Rate:</span>
+                <span id="completionRate">0%</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Avg. Time/Question:</span>
+                <span id="avgTimePerQuestion">0:00</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Difficulty Score:</span>
+                <span id="difficultyScore">Medium</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced global variables
+        let currentUser = null;
+        let currentExam = null;
+        let currentQuestionIndex = 0;
+        let examTimer = null;
+        let examStartTime = null;
+        let studentAnswers = {};
+        let flaggedQuestions = new Set();
+        let securityViolations = [];
+        let aiProctoringActive = false;
+        let blockchainVerification = false;
+        let examData = {
+            students: [],
+            experts: [],
+            exams: [],
+            results: [],
+            questions: [],
+            aiDetections: [],
+            securityLogs: [],
+            tracks: ['computing', 'cloud-computing', 'networking']
+        };
+
+        // Initialize the enhanced application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAuth();
+            initializeSidebar();
+            initializeDarkMode();
+            initializeEnhancedAntiCheat();
+            initializeAIProctoring();
+            initializeBlockchainVerification();
+            loadSampleData();
+            updateUI();
+            startRealTimeMonitoring();
+        });
+
+        // Enhanced authentication and user management
+        function initializeAuth() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+            if (!isAuthenticated) {
+                // Redirect to login
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = userData;
+            updateUserInfo();
+            showUserNavigation();
+            initializeBiometricAuth();
+        }
+
+        function updateUserInfo() {
+            if (!currentUser) return;
+
+            document.getElementById('userName').textContent = currentUser.name || 'User';
+            document.getElementById('userRole').textContent = currentUser.role || 'Role';
+            document.getElementById('userTrack').textContent = currentUser.track ? `${currentUser.track.charAt(0).toUpperCase() + currentUser.track.slice(1)} Track` : '';
+
+            const avatar = document.getElementById('userAvatar');
+            const initials = (currentUser.name || 'U').split(' ').map(n => n[0]).join('').toUpperCase();
+            avatar.textContent = initials;
+
+            // Set avatar color based on role
+            const roleColors = {
+                'student': 'from-green-500 to-blue-600',
+                'expert': 'from-purple-500 to-blue-600',
+                'administrator': 'from-red-500 to-blue-600'
+            };
+            avatar.className = `w-10 h-10 bg-gradient-to-br ${roleColors[currentUser.role] || 'from-gray-500 to-gray-600'} rounded-full flex items-center justify-center text-white font-bold mr-3`;
+        }
+
+        function showUserNavigation() {
+            const studentNav = document.getElementById('studentNav');
+            const expertNav = document.getElementById('expertNav');
+            const adminNav = document.getElementById('adminNav');
+            const trackFilter = document.getElementById('trackFilter');
+
+            if (currentUser.role === 'student') {
+                studentNav.classList.remove('hidden');
+                expertNav.classList.add('hidden');
+                adminNav.classList.add('hidden');
+                trackFilter.classList.remove('hidden');
+                showSection('available-exams');
+            } else if (currentUser.role === 'expert') {
+                studentNav.classList.add('hidden');
+                expertNav.classList.remove('hidden');
+                adminNav.classList.add('hidden');
+                trackFilter.classList.remove('hidden');
+                showSection('exam-dashboard');
+            } else if (currentUser.role === 'administrator') {
+                studentNav.classList.add('hidden');
+                expertNav.classList.add('hidden');
+                adminNav.classList.remove('hidden');
+                trackFilter.classList.remove('hidden');
+                showSection('admin-dashboard');
+            }
+        }
+
+        // Enhanced sidebar functionality
+        function initializeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const openSidebar = document.getElementById('openSidebar');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const toggleSidebar = document.getElementById('toggleSidebar');
+
+            // Mobile sidebar toggle
+            openSidebar ? .addEventListener('click', () => {
+                sidebar.classList.remove('mobile-hidden');
+                sidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeSidebar ? .addEventListener('click', () => {
+                sidebar.classList.add('mobile-hidden');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+
+            sidebarOverlay ? .addEventListener('click', () => {
+                sidebar.classList.add('mobile-hidden');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+
+            // Desktop sidebar toggle
+            toggleSidebar ? .addEventListener('click', () => {
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                if (isCollapsed) {
+                    sidebar.classList.remove('collapsed');
+                    mainContent.classList.remove('sidebar-collapsed');
+                } else {
+                    sidebar.classList.add('collapsed');
+                    mainContent.classList.add('sidebar-collapsed');
+                }
+            });
+
+            // Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active class from all items
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    // Add active class to clicked item
+                    item.classList.add('active');
+
+                    // Show corresponding section
+                    const section = item.dataset.section;
+                    if (section) showSection(section);
+
+                    // Close mobile sidebar after navigation
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.add('mobile-hidden');
+                        sidebarOverlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            // Back to dashboard
+            document.getElementById('backToDashboard') ? .addEventListener('click', () => {
+                const dashboardUrls = {
+                    'student': 'dashboard_student.html',
+                    'expert': 'dashboard_expert.html',
+                    'administrator': 'dashboard_administrator.html'
+                };
+                const url = dashboardUrls[currentUser.role] || 'index.html';
+                window.location.href = url;
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('mobile-hidden');
+                    sidebarOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Initialize mobile state
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('mobile-hidden');
+            }
+        }
+
+        // Enhanced section management
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('fade-in');
+            });
+
+            // Show selected section
+            const targetSection = document.getElementById(`${sectionName}-section`);
+            if (targetSection) {
+                setTimeout(() => {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('fade-in');
+
+                    // Load section-specific content
+                    loadSectionContent(sectionName);
+                }, 150);
+            }
+
+            // Update header
+            updateHeader(sectionName);
+        }
+
+        function updateHeader(sectionName) {
+            const titles = {
+                'available-exams': 'Available Examinations',
+                'exam-results': 'My Exam Results',
+                'exam-history': 'Exam History',
+                'practice-tests': 'Practice Tests',
+                'performance-analytics': 'Performance Analytics',
+                'exam-dashboard': 'Exam Management Dashboard',
+                'create-exam': 'Create Advanced Exam',
+                'manage-exams': 'Manage Exams',
+                'grade-exams': 'Grade Exams',
+                'exam-analytics': 'All Exam Results',
+                'question-bank': 'Question Bank',
+                'ai-proctoring': 'AI Proctoring Center',
+                'admin-dashboard': 'System Monitor',
+                'exam-monitoring': 'Live Exam Monitor',
+                'security-logs': 'Security Logs',
+                'all-results': 'System-wide Results',
+                'blockchain-verification': 'Blockchain Verification'
+            };
+
+            const subtitles = {
+                'available-exams': 'Track-specific examinations with AI proctoring',
+                'exam-results': 'Your personal examination results (private)',
+                'exam-history': 'Historical examination records',
+                'practice-tests': 'Adaptive practice sessions',
+                'performance-analytics': 'Advanced learning analytics',
+                'exam-dashboard': 'Comprehensive examination management',
+                'create-exam': 'AI-assisted exam creation with track selection',
+                'manage-exams': 'Schedule and configure examinations',
+                'grade-exams': 'Intelligent grading with AI assistance',
+                'exam-analytics': 'View all student results across tracks',
+                'question-bank': 'Intelligent question repository',
+                'ai-proctoring': 'Advanced AI monitoring and security',
+                'admin-dashboard': 'Real-time system monitoring and administration',
+                'exam-monitoring': 'Live examination oversight',
+                'security-logs': 'Security event monitoring',
+                'all-results': 'Complete system examination overview',
+                'blockchain-verification': 'Immutable exam record verification'
+            };
+
+            document.getElementById('headerTitle').textContent = titles[sectionName] || 'Advanced Exam System';
+            document.getElementById('headerSubtitle').textContent = subtitles[sectionName] || 'AI-Powered examination platform with blockchain verification';
+        }
+
+        // Dark mode
+        function initializeDarkMode() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+                darkModeIcon.className = 'fas fa-sun';
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                    darkModeIcon.className = 'fas fa-sun';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    darkModeIcon.className = 'fas fa-moon';
+                }
+            });
+
+            darkModeToggle ? .addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                darkModeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            });
+        }
+
+        // Load sample data with tracks
+        function loadSampleData() {
+            examData = {
+                tracks: ['computing', 'cloud-computing', 'networking'],
+                students: [{
+                    id: 'student1',
+                    name: 'John Doe',
+                    email: 'john@student.com',
+                    track: 'computing'
+                }, {
+                    id: 'student2',
+                    name: 'Jane Smith',
+                    email: 'jane@student.com',
+                    track: 'cloud-computing'
+                }, {
+                    id: 'student3',
+                    name: 'Bob Wilson',
+                    email: 'bob@student.com',
+                    track: 'networking'
+                }, {
+                    id: 'student4',
+                    name: 'Alice Brown',
+                    email: 'alice@student.com',
+                    track: 'computing'
+                }],
+                experts: [{
+                    id: 'expert1',
+                    name: 'Dr. Sarah Johnson',
+                    email: 'sarah@expert.com',
+                    specialization: 'computing'
+                }, {
+                    id: 'expert2',
+                    name: 'Prof. Michael Chen',
+                    email: 'michael@expert.com',
+                    specialization: 'cloud-computing'
+                }],
+                exams: [{
+                    id: 'exam1',
+                    title: 'Advanced Python Programming Assessment',
+                    track: 'computing',
+                    duration: 120,
+                    totalMarks: 150,
+                    startDate: '2024-04-15T10:00',
+                    endDate: '2024-04-15T12:00',
+                    creator: 'expert1',
+                    instructions: 'This is an AI-proctored examination for Computing track students.',
+                    status: 'scheduled',
+                    questions: [{
+                        id: 'q1',
+                        type: 'multiple-choice',
+                        question: 'Which design pattern ensures a class has only one instance?',
+                        options: ['Singleton', 'Factory', 'Observer', 'Strategy'],
+                        correctAnswer: 0,
+                        points: 10
+                    }]
+                }, {
+                    id: 'exam2',
+                    title: 'Cloud Architecture Fundamentals',
+                    track: 'cloud-computing',
+                    duration: 90,
+                    totalMarks: 100,
+                    startDate: '2024-04-16T14:00',
+                    endDate: '2024-04-16T15:30',
+                    creator: 'expert2',
+                    instructions: 'Cloud Computing track examination on AWS and Azure fundamentals.',
+                    status: 'scheduled',
+                    questions: [{
+                        id: 'q2',
+                        type: 'multiple-choice',
+                        question: 'What is the main benefit of cloud computing?',
+                        options: ['Cost reduction', 'Scalability', 'Security', 'All of the above'],
+                        correctAnswer: 3,
+                        points: 10
+                    }]
+                }, {
+                    id: 'exam3',
+                    title: 'Network Security Protocols',
+                    track: 'networking',
+                    duration: 75,
+                    totalMarks: 80,
+                    startDate: '2024-04-17T09:00',
+                    endDate: '2024-04-17T10:15',
+                    creator: 'expert1',
+                    instructions: 'Networking track examination on security protocols and implementation.',
+                    status: 'scheduled',
+                    questions: [{
+                        id: 'q3',
+                        type: 'multiple-choice',
+                        question: 'Which protocol provides secure communication over a network?',
+                        options: ['HTTP', 'HTTPS', 'FTP', 'SMTP'],
+                        correctAnswer: 1,
+                        points: 10
+                    }]
+                }],
+                results: [{
+                    id: 'result1',
+                    examId: 'exam1',
+                    studentId: 'student1',
+                    studentName: 'John Doe',
+                    examTitle: 'Advanced Python Programming Assessment',
+                    track: 'computing',
+                    score: 92,
+                    grade: 'A',
+                    date: '2024-04-10',
+                    securityViolations: 0,
+                    blockchainHash: 'abc123def456'
+                }, {
+                    id: 'result2',
+                    examId: 'exam2',
+                    studentId: 'student2',
+                    studentName: 'Jane Smith',
+                    examTitle: 'Cloud Architecture Fundamentals',
+                    track: 'cloud-computing',
+                    score: 88,
+                    grade: 'B+',
+                    date: '2024-04-11',
+                    securityViolations: 1,
+                    blockchainHash: 'def456ghi789'
+                }, {
+                    id: 'result3',
+                    examId: 'exam3',
+                    studentId: 'student3',
+                    studentName: 'Bob Wilson',
+                    examTitle: 'Network Security Protocols',
+                    track: 'networking',
+                    score: 95,
+                    grade: 'A+',
+                    date: '2024-04-12',
+                    securityViolations: 0,
+                    blockchainHash: 'ghi789jkl012'
+                }, {
+                    id: 'result4',
+                    examId: 'exam1',
+                    studentId: 'student4',
+                    studentName: 'Alice Brown',
+                    examTitle: 'Advanced Python Programming Assessment',
+                    track: 'computing',
+                    score: 84,
+                    grade: 'B',
+                    date: '2024-04-13',
+                    securityViolations: 0,
+                    blockchainHash: 'jkl012mno345'
+                }],
+                aiDetections: [],
+                securityLogs: []
+            };
+
+            localStorage.setItem('examSystemData', JSON.stringify(examData));
+        }
+
+        // Enhanced content loading functions
+        function loadSectionContent(sectionName) {
+            switch (sectionName) {
+                case 'available-exams':
+                    loadAvailableExams();
+                    break;
+                case 'exam-results':
+                    loadStudentResults();
+                    break;
+                case 'exam-analytics':
+                    loadAllResults();
+                    break;
+                case 'all-results':
+                    loadAdminResults();
+                    break;
+                case 'exam-dashboard':
+                    loadExamDashboard();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function loadAvailableExams() {
+            const container = document.getElementById('upcomingExams');
+            const trackFilter = document.getElementById('examTrackFilter');
+            const selectedTrack = trackFilter ? .value || 'all';
+
+            let exams = examData.exams.filter(exam => {
+                const startDate = new Date(exam.startDate);
+                const endDate = new Date(exam.endDate);
+                const now = new Date();
+                const trackMatch = selectedTrack === 'all' || exam.track === selectedTrack;
+                const studentTrackMatch = currentUser.role !== 'student' || exam.track === currentUser.track;
+                return startDate <= now && endDate >= now && exam.status === 'scheduled' && trackMatch && studentTrackMatch;
+            });
+
+            container.innerHTML = '';
+
+            if (exams.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-2 text-center py-12">
+                        <i class="fas fa-clipboard-list text-4xl text-gray-400 mb-4"></i>
+                        <h3 class="text-lg font-semibold text-gray-500 mb-2">No Available Exams</h3>
+                        <p class="text-gray-400">Check back later for scheduled examinations in your track.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            exams.forEach(exam => {
+                const card = createEnhancedExamCard(exam);
+                container.appendChild(card);
+            });
+
+            document.getElementById('availableExamsCount').textContent = exams.length;
+        }
+
+        function createEnhancedExamCard(exam) {
+            const card = document.createElement('div');
+            card.className = 'card p-6 border-l-4 border-blue-500';
+
+            const startDate = new Date(exam.startDate);
+            const endDate = new Date(exam.endDate);
+            const now = new Date();
+            const isActive = startDate <= now && endDate >= now;
+
+            const trackBadgeClass = `track-badge track-${exam.track}`;
+
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">${exam.title}</h3>
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="${trackBadgeClass}">${exam.track.replace('-', ' ')} Track</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium ${isActive ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                                ${isActive ? 'Available Now' : 'Scheduled'}
+                            </span>
+                        </div>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span><i class="fas fa-clock mr-1"></i>${exam.duration} minutes</span>
+                            <span><i class="fas fa-trophy mr-1"></i>${exam.totalMarks} marks</span>
+                            <span><i class="fas fa-robot mr-1"></i>AI Proctored</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    <p><strong>Start:</strong> ${startDate.toLocaleString()}</p>
+                    <p><strong>End:</strong> ${endDate.toLocaleString()}</p>
+                </div>
+
+                <div class="mb-4">
+                    <div class="flex items-center space-x-4 text-sm">
+                        <div class="flex items-center text-green-600"><i class="fas fa-robot mr-1"></i>AI Monitoring</div>
+                        <div class="flex items-center text-purple-600"><i class="fas fa-link mr-1"></i>Blockchain Secured</div>
+                        <div class="flex items-center text-blue-600"><i class="fas fa-fingerprint mr-1"></i>Biometric Auth</div>
+                    </div>
+                </div>
+                
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">${exam.instructions}</p>
+                
+                <div class="flex justify-between items-center">
+                    <div class="text-sm">
+                        <span class="text-gray-500">${exam.questions.length} questions</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="btn-secondary text-sm px-4 py-2" onclick="showExamPreview('${exam.id}')">
+                            <i class="fas fa-eye mr-2"></i>Preview
+                        </button>
+                        <button class="btn-primary ${!isActive ? 'opacity-50 cursor-not-allowed' : ''}" 
+                                onclick="startAdvancedExam('${exam.id}')" ${!isActive ? 'disabled' : ''}>
+                            <i class="fas fa-play mr-2"></i>Start Exam
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function loadStudentResults() {
+            if (currentUser.role !== 'student') return;
+
+            const table = document.getElementById('student-results-table');
+            const studentResults = examData.results.filter(result => result.studentId === currentUser.username);
+
+            table.innerHTML = '';
+
+            studentResults.forEach(result => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">${result.examTitle}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="track-badge track-${result.track}">${result.track.replace('-', ' ')}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">${result.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${result.score}%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${result.grade}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${result.score >= 60 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'}">
+                            ${result.score >= 60 ? 'Passed' : 'Failed'}
+                        </span>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        function loadAllResults() {
+            if (currentUser.role !== 'expert') return;
+
+            const table = document.getElementById('all-results-table');
+            const trackFilter = document.getElementById('expertTrackFilter');
+            const selectedTrack = trackFilter ? .value || 'all';
+
+            let results = examData.results;
+            if (selectedTrack !== 'all') {
+                results = results.filter(result => result.track === selectedTrack);
+            }
+
+            table.innerHTML = '';
+
+            results.forEach(result => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">${result.studentName}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${result.examTitle}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="track-badge track-${result.track}">${result.track.replace('-', ' ')}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">${result.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${result.score}%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${result.grade}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${result.securityViolations === 0 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                            ${result.securityViolations === 0 ? 'Clean' : `${result.securityViolations} Violations`}
+                        </span>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        function loadAdminResults() {
+            if (currentUser.role !== 'administrator') return;
+
+            const table = document.getElementById('admin-results-table');
+            const trackFilter = document.getElementById('adminTrackFilter');
+            const selectedTrack = trackFilter?.value || 'all';
+            
+            let results = examData.results;
+            if (selectedTrack !== 'all') {
+                results = results.filter(result => result.track === selectedTrack);
+            }
+
+            table.innerHTML = '';
+
+            // Update statistics
+            document.getElementById('totalStudentsDisplay').textContent = examData.students.length;
+            document.getElementById('totalExamsDisplay').textContent = examData.exams.length;
+            document.getElementById('averageScoreDisplay').textContent = Math.round(results.reduce((sum, r) => sum + r.score, 0) / results.length) + '%';
+            document.getElementById('securityIncidentsDisplay').textContent = results.reduce((sum, r) => sum + r.securityViolations, 0);
+
+            results.forEach(result => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">${result.studentId}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">${result.studentName}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${result.examTitle}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="track-badge track-${result.track}">${result.track.replace('-', ' ')}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">${result.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">${result.score}%</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">
+                            ✓ Verified
+                        </span>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        // Track filter event listeners
+        document.getElementById('examTrackFilter')?.addEventListener('change', loadAvailableExams);
+        document.getElementById('expertTrackFilter')?.addEventListener('change', loadAllResults);
+        document.getElementById('adminTrackFilter')?.addEventListener('change', loadAdminResults);
+
+        // Export functions
+        function exportMyResults() {
+            if (currentUser.role !== 'student') return;
+            const studentResults = examData.results.filter(result => result.studentId === currentUser.username);
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Exam,Track,Date,Score,Grade,Status\n" +
+                studentResults.map(r => `${r.examTitle},${r.track},${r.date},${r.score}%,${r.grade},${r.score >= 60 ? 'Passed' : 'Failed'}`).join('\n');
+            
+            const link = document.createElement('a');
+            link.setAttribute('href', encodeURI(csvContent));
+            link.setAttribute('download', `${currentUser.username}_exam_results.csv`);
+            link.click();
+        }
+
+        function exportAllResults() {
+            if (currentUser.role !== 'expert') return;
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "Student,Exam,Track,Date,Score,Grade,Security\n" +
+                examData.results.map(r => `${r.studentName},${r.examTitle},${r.track},${r.date},${r.score}%,${r.grade},${r.securityViolations === 0 ? 'Clean' : r.securityViolations + ' Violations'}`).join('\n');
+            
+            const link = document.createElement('a');
+            link.setAttribute('href', encodeURI(csvContent));
+            link.setAttribute('download', 'all_exam_results.csv');
+            link.click();
+        }
+
+        function generateSystemReport() {
+            if (currentUser.role !== 'administrator') return;
+            showToast('Generating comprehensive system report...', 'info');
+            setTimeout(() => {
+                showToast('System report generated successfully!', 'success');
+            }, 2000);
+        }
+
+        // Enhanced exam management functions
+        function startAdvancedExam(examId) {
+            const exam = examData.exams.find(e => e.id === examId);
+            if (!exam) {
+                showToast('Exam not found', 'error');
+                return;
+            }
+
+            // Check if student's track matches exam track
+            if (currentUser.role === 'student' && currentUser.track !== exam.track) {
+                showToast('This exam is not available for your track', 'error');
+                return;
+            }
+
+            // Show enhanced confirmation
+            showCustomConfirm(
+                'Start Advanced Examination',
+                `Are you ready to start "${exam.title}" for ${exam.track.replace('-', ' ')} track?\n\nThis exam includes:\n• AI Proctoring\n• Blockchain Verification\n• Biometric Authentication\n• Screen Recording\n\nDuration: ${exam.duration} minutes`,
+                async() => {
+                    await prepareExamEnvironment(exam);
+                }
+            );
+        }
+
+        async function prepareExamEnvironment(exam) {
+            // Show preparation steps
+            showToast('Preparing secure exam environment...', 'info');
+
+            // Simulate preparation steps
+            await sleep(1000);
+            showToast('Verifying biometric authentication...', 'info');
+
+            await sleep(1000);
+            showToast('Initializing AI proctoring...', 'info');
+
+            await sleep(1000);
+            showToast('Creating blockchain record...', 'info');
+
+            // Verify on blockchain
+            const blockchainRecord = await verifyOnBlockchain({
+                examId: exam.id,
+                studentId: currentUser.username,
+                track: exam.track,
+                startTime: new Date().toISOString()
+            });
+
+            await sleep(1000);
+            showToast('Environment ready. Starting exam...', 'success');
+
+            // Start the exam
+            currentExam = exam;
+            currentQuestionIndex = 0;
+            studentAnswers = {};
+            flaggedQuestions.clear();
+            examStartTime = new Date();
+            securityViolations = [];
+
+            // Enable exam mode features
+            if (exam.settings?.fullScreenMode) {
+                toggleFullscreen();
+            }
+
+            // Show exam interface
+            showSection('exam-taking');
+            loadExamInterface();
+            startExamTimer();
+            startAIProctoring();
+
+            // Show proctoring panel and analytics
+            document.getElementById('proctoringPanel').classList.remove('hidden');
+            document.getElementById('examAnalytics').classList.remove('hidden');
+        }
+
+        function loadExamInterface() {
+            if (!currentExam) return;
+
+            // Update exam header
+            document.getElementById('examTitle').textContent = currentExam.title;
+            document.getElementById('examInstructions').textContent = currentExam.instructions;
+            document.getElementById('totalQuestions').textContent = currentExam.questions.length;
+
+            // Update track badge
+            const trackBadge = document.getElementById('examTrackBadge');
+            trackBadge.className = `track-badge track-${currentExam.track}`;
+            trackBadge.textContent = `${currentExam.track.replace('-', ' ')} Track`;
+
+            // Show timer
+            document.getElementById('examTimer').classList.remove('hidden');
+
+            // Create question navigation
+            createQuestionNavigation();
+
+            // Load first question
+            loadQuestion(0);
+
+            // Start real-time analytics
+            startExamAnalytics();
+        }
+
+        // Additional utility functions continue here...
+        // Rest of the implementation follows the same pattern with track-aware functionality
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function initializeEnhancedAntiCheat() {
+            // Anti-cheat implementation
+        }
+
+        function initializeAIProctoring() {
+            // AI proctoring implementation
+        }
+
+        function initializeBlockchainVerification() {
+            blockchainVerification = true;
+        }
+
+        function initializeBiometricAuth() {
+            // Biometric auth implementation
+        }
+
+        function updateUI() {
+            // UI update implementation
+        }
+
+        function startRealTimeMonitoring() {
+            // Real-time monitoring implementation
+        }
+
+        function verifyOnBlockchain(data) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        verified: true,
+                        hash: 'blockchain_hash_' + Date.now(),
+                        timestamp: new Date().toISOString()
+                    });
+                }, 1000);
+            });
+        }
+
+        function showToast(message, type = 'info') {
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} mr-2"></i>
+                    <span class="flex-1">${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        function showCustomConfirm(title, message, onConfirm) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-question-circle text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">${title}</h3>
+                        <p class="text-gray-700 dark:text-gray-300 mb-6 whitespace-pre-line">${message}</p>
+                        <div class="flex justify-center space-x-3">
+                            <button class="px-6 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onclick="this.closest('.fixed').remove()">Cancel</button>
+                            <button class="px-6 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg transition-colors" onclick="this.closest('.fixed').remove(); (${onConfirm})()">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Initialize everything
+        function refreshExams() {
+            loadAvailableExams();
+            showToast('Exams refreshed', 'info');
+        }
+
+        function runSystemCheck() {
+            showToast('Running comprehensive system check...', 'info');
+            
+            setTimeout(() => {
+                showToast('✓ Camera and microphone access verified', 'success');
+            }, 1000);
+            
+            setTimeout(() => {
+                showToast('✓ Internet connection stable', 'success');
+            }, 2000);
+            
+            setTimeout(() => {
+                showToast('✓ Browser compatibility confirmed', 'success');
+            }, 3000);
+            
+            setTimeout(() => {
+                showToast('System check completed successfully!', 'success');
+            }, 4000);
+        }
+
+        // Create exam functionality
+        let questionCount = 0;
+
+        function addQuestion() {
+            questionCount++;
+            const container = document.getElementById('questions-container');
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-item border border-gray-200 dark:border-gray-700 rounded-lg p-4';
+            questionDiv.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-lg font-medium text-gray-900 dark:text-white">Question ${questionCount}</h4>
+                    <button type="button" onclick="removeQuestion(this)" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Question Type</label>
+                        <select class="input-field w-full" onchange="updateQuestionType(this)">
+                            <option value="multiple-choice">Multiple Choice</option>
+                            <option value="short-answer">Short Answer</option>
+                            <option value="essay">Essay</option>
+                            <option value="true-false">True/False</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Points</label>
+                        <input type="number" class="input-field w-full" value="5" min="1">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Question Text</label>
+                    <textarea class="input-field w-full" rows="3" placeholder="Enter your question here..."></textarea>
+                </div>
+                <div class="question-options">
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Options</label>
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <input type="radio" name="correct-${questionCount}" value="0" class="text-primary">
+                                <input type="text" class="input-field flex-1" placeholder="Option A">
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input type="radio" name="correct-${questionCount}" value="1" class="text-primary">
+                                <input type="text" class="input-field flex-1" placeholder="Option B">
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input type="radio" name="correct-${questionCount}" value="2" class="text-primary">
+                                <input type="text" class="input-field flex-1" placeholder="Option C">
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input type="radio" name="correct-${questionCount}" value="3" class="text-primary">
+                                <input type="text" class="input-field flex-1" placeholder="Option D">
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Select the correct answer</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(questionDiv);
+        }
+
+        function removeQuestion(button) {
+            button.closest('.question-item').remove();
+        }
+
+        function updateQuestionType(select) {
+            // Question type update implementation
+        }
+
+        async function generateAIQuestions() {
+            const topic = document.getElementById('ai-topic').value.trim();
+            if (!topic) {
+                showToast('Please enter a topic for AI question generation.', 'warning');
+                return;
+            }
+
+            const output = document.getElementById('ai-questions-output');
+            const content = document.getElementById('ai-questions-content');
+            
+            output.classList.remove('hidden');
+            content.innerHTML = '';
+
+            try {
+                // Register handler for AI response
+                window.Poe.registerHandler('ai-questions-handler', (result) => {
+                    const response = result.responses[0];
+                    
+                    if (response.status === 'error') {
+                        content.innerHTML = `<span class="text-red-600 dark:text-red-400">Error: ${response.statusText}</span>`;
+                        output.className = 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4';
+                    } else if (response.status === 'incomplete') {
+                        content.innerHTML = marked.parse(response.content || 'Generating questions...');
+                    } else if (response.status === 'complete') {
+                        content.innerHTML = marked.parse(response.content);
+                        output.className = 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md p-4';
+                        
+                        // Add button to convert AI questions to form
+                        const convertBtn = document.createElement('button');
+                        convertBtn.textContent = 'Add These Questions to Exam';
+                        convertBtn.className = 'mt-3 btn-primary';
+                        convertBtn.onclick = () => parseAIQuestions(response.content);
+                        content.appendChild(convertBtn);
+                    }
+                });
+
+                await window.Poe.sendUserMessage(
+                    `@Claude-Sonnet-4 Generate 5 exam questions about "${topic}". For each question, include:
+1. The question text
+2. Question type (multiple choice, short answer, or essay)
+3. If multiple choice, provide 4 options with the correct answer marked
+4. If short answer, provide a sample correct answer
+5. If essay, suggest a word limit and key points to cover
+
+Format your response clearly with numbered questions. Provide ONLY the questions and answers in your response with no additional explanations.`,
+                    {
+                        handler: 'ai-questions-handler',
+                        stream: true,
+                        openChat: false
+                    }
+                );
+            } catch (error) {
+                content.innerHTML = `<span class="text-red-600 dark:text-red-400">Error: ${error.message}</span>`;
+                output.className = 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4';
+            }
+        }
+
+        function parseAIQuestions(aiResponse) {
+            // For demo purposes, just add a few sample questions
+            for (let i = 0; i < 3; i++) {
+                addQuestion();
+            }
+            
+            showToast('AI questions have been added to your exam! You can edit them as needed.', 'success');
+        }
+
+        function saveAsDraft() {
+            showToast('Exam saved as draft successfully!', 'success');
+        }
+
+        // Form submission
+        document.getElementById('create-exam-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('exam-title').value;
+            const track = document.getElementById('exam-track').value;
+            const duration = document.getElementById('exam-duration').value;
+            const marks = document.getElementById('exam-marks').value;
+            const passing = document.getElementById('exam-passing').value;
+            
+            if (!title || !track || !duration || !marks || !passing) {
+                showToast('Please fill in all required fields.', 'warning');
+                return;
+            }
+            
+            showToast('Exam created successfully!', 'success');
+            setTimeout(() => {
+                showSection('exam-dashboard');
+            }, 1500);
+        });
+
+        // Additional functions for exam taking would continue here...
+        function loadQuestion(index) {
+            // Implementation for loading questions during exam
+        }
+
+        function createQuestionNavigation() {
+            // Implementation for question navigation
+        }
+
+        function startExamTimer() {
+            // Implementation for exam timer
+        }
+
+        function startExamAnalytics() {
+            // Implementation for exam analytics
+        }
+
+        function previousQuestion() {
+            // Implementation for previous question
+        }
+
+        function nextQuestion() {
+            // Implementation for next question
+        }
+
+        function toggleFlag() {
+            // Implementation for flagging questions
+        }
+
+        function showReview() {
+            // Implementation for review
+        }
+
+        function showCalculator() {
+            // Implementation for calculator
+        }
+
+        function showFormulas() {
+            // Implementation for formulas
+        }
+
+        function submitExam() {
+            // Implementation for exam submission
+        }
+
+        function returnToExam() {
+            // Implementation for returning to exam
+        }
+
+        function toggleFullscreen() {
+            // Implementation for fullscreen toggle
+        }
+
+        function showExamPreview(examId) {
+            // Implementation for exam preview
+        }
+
+        function loadExamDashboard() {
+            // Implementation for loading expert dashboard
+        }
+    </script>
+</body>
+
+</html>

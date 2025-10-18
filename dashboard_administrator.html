@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Dashboard - HUAWEI-UDOM Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --huawei-red: #e62928;
+            --huawei-dark-red: #c41e1d;
+            --huawei-blue: #1f69aa;
+            --huawei-light-blue: #4e93d3;
+        }
+        
+        .dark {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2a2a2a;
+            --bg-tertiary: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --border-color: #444444;
+        }
+        
+         :root:not(.dark) {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --border-color: #e2e8f0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            width: 280px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        
+        .sidebar.mobile-hidden {
+            transform: translateX(-100%);
+        }
+        
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+        }
+        
+        .sidebar-overlay.show {
+            display: block;
+        }
+        
+        .nav-item {
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(230, 41, 40, 0.15), rgba(31, 105, 170, 0.15));
+            color: var(--huawei-red);
+            border-left: 4px solid var(--huawei-red);
+        }
+        
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 30px;
+            background: var(--huawei-red);
+            border-radius: 2px;
+        }
+        
+        .nav-text {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+        
+        .sidebar.collapsed .nav-badge {
+            display: none;
+        }
+        
+        .main-content {
+            transition: all 0.3s ease;
+            margin-left: 280px;
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 80px;
+        }
+        
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--huawei-red), var(--huawei-dark-red));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--huawei-dark-red), var(--huawei-red));
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(230, 41, 40, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--huawei-blue);
+            border: 2px solid var(--huawei-blue);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--huawei-blue);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .stats-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s ease;
+        }
+        
+        .stats-card:hover::before {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--huawei-red), var(--huawei-blue));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .session-timer {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(251, 191, 36, 0.1));
+            color: #f59e0b;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .toast-error {
+            background: linear-gradient(135deg, var(--huawei-red), var(--huawei-dark-red));
+        }
+        
+        .toast-info {
+            background: linear-gradient(135deg, var(--huawei-blue), var(--huawei-light-blue));
+        }
+        
+        .toast-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .notification-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-online {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+            color: #16a34a;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-warning {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+            color: #d97706;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+        
+        .status-error {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table th {
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        
+        .data-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .exam-badge {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(126, 34, 206, 0.1));
+            color: #7c3aed;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            animation: examPulse 2s infinite;
+        }
+        
+        @keyframes examPulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 50;
+                width: 280px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .main-content.sidebar-collapsed {
+                margin-left: 0;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar fixed top-0 left-0 h-full z-40" id="sidebar">
+        <div class="flex flex-col h-full">
+            <!-- Logo -->
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-3 shadow-lg">
+                            HU
+                        </div>
+                        <span class="nav-text text-lg font-bold whitespace-nowrap">UDOM Portal</span>
+                    </div>
+                    <button class="md:hidden text-gray-500 hover:text-gray-700" id="closeSidebar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center">
+                    <div class="user-avatar mr-3">SA</div>
+                    <div class="nav-text">
+                        <div class="font-semibold" id="userName">System Administrator</div>
+                        <div class="text-xs text-gray-500">Administrator</div>
+                    </div>
+                </div>
+                <div class="session-timer mt-3">
+                    <i class="fas fa-shield-alt mr-1"></i>
+                    <span class="nav-text">Session: <span id="sessionTimer">59:45</span></span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 p-4 overflow-y-auto">
+                <div class="mb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Main</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item active flex items-center px-4 py-3" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Dashboard</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="users">
+                            <i class="fas fa-users w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">User Management</span>
+                            <span class="nav-badge ml-auto notification-badge nav-text">5</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="courses">
+                            <i class="fas fa-graduation-cap w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Course Management</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="analytics">
+                            <i class="fas fa-chart-bar w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Analytics</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="issues">
+                            <i class="fas fa-exclamation-circle w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Issue Tracking</span>
+                            <span class="nav-badge ml-auto notification-badge nav-text">8</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Examinations</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" onclick="accessExamSystem()">
+                            <i class="fas fa-clipboard-check w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Exam System</span>
+                            <span class="nav-badge ml-auto exam-badge nav-text">Admin</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="exam-monitoring">
+                            <i class="fas fa-eye w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Live Monitoring</span>
+                            <span class="nav-badge ml-auto notification-badge nav-text">12</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="exam-reports">
+                            <i class="fas fa-chart-line w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Exam Reports</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">System</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="security">
+                            <i class="fas fa-shield-alt w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Security & Access</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="reports">
+                            <i class="fas fa-file-alt w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Reports</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="settings">
+                            <i class="fas fa-cog w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">System Settings</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="backup">
+                            <i class="fas fa-database w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Backup & Recovery</span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Monitoring</div>
+                <ul class="space-y-2">
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="system-health">
+                            <i class="fas fa-heartbeat w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">System Health</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="logs">
+                            <i class="fas fa-list-alt w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Activity Logs</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center px-4 py-3" data-section="notifications">
+                            <i class="fas fa-bell w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Notifications</span>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout -->
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <button class="w-full flex items-center justify-center px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-colors" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span class="nav-text">Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Top Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center">
+                    <button class="md:hidden mr-4 text-gray-600 hover:text-gray-800" id="openSidebar">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <button class="hidden md:block mr-4 text-gray-600 hover:text-gray-800" id="toggleSidebar">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold">Administrator Dashboard</h1>
+                        <p class="text-sm text-gray-500">System management and oversight</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 px-3 py-1 bg-green-100 dark:bg-green-900 rounded-full">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span class="text-sm text-green-700 dark:text-green-300">All Systems Operational</span>
+                    </div>
+
+                    <button class="btn-primary text-sm" onclick="accessExamSystem()">
+                        <i class="fas fa-clipboard-check mr-2"></i>Exam System
+                    </button>
+
+                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative" id="notificationBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute -top-1 -right-1 notification-badge">5</span>
+                    </button>
+
+                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" id="darkModeToggle">
+                        <i class="fas fa-moon" id="darkModeIcon"></i>
+                    </button>
+
+                    <a href="index.html" class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" title="Home">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="p-6">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section fade-in">
+                <!-- System Overview -->
+                <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-red-600 text-white rounded-2xl p-8 mb-8 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-black opacity-10"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-3xl font-bold mb-2">System Overview</h2>
+                                <p class="text-blue-100 text-lg">HUAWEI-UDOM Digital Learning Platform</p>
+                                <div class="mt-4 flex items-center space-x-6">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold">99.9%</div>
+                                        <div class="text-sm text-blue-100">Uptime</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold">1,247</div>
+                                        <div class="text-sm text-blue-100">Active Users</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold">89</div>
+                                        <div class="text-sm text-blue-100">Courses</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold">12</div>
+                                        <div class="text-sm text-blue-100">Live Exams</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="w-32 h-32 relative">
+                                    <svg class="progress-ring w-32 h-32" viewBox="0 0 120 120">
+                                        <circle cx="60" cy="60" r="54" fill="transparent" stroke="rgba(255,255,255,0.2)" stroke-width="8"/>
+                                        <circle cx="60" cy="60" r="54" fill="transparent" stroke="white" stroke-width="8" 
+                                                stroke-dasharray="339.29" stroke-dashoffset="33.93" class="progress-ring-circle"/>
+                                    </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold">90%</div>
+                                            <div class="text-xs">Health Score</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-users text-2xl text-blue-600"></i>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-blue-600">1,247</div>
+                                <div class="text-sm text-gray-500">Total Users</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-green-600">
+                            <i class="fas fa-arrow-up mr-1"></i>12% from last month
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-graduation-cap text-2xl text-green-600"></i>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-green-600">89</div>
+                                <div class="text-sm text-gray-500">Active Courses</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-green-600">
+                            <i class="fas fa-arrow-up mr-1"></i>8% increase
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clipboard-check text-2xl text-purple-600"></i>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-purple-600">247</div>
+                                <div class="text-sm text-gray-500">Active Exams</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-purple-600">
+                            <i class="fas fa-robot mr-1"></i>AI Proctored
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-2xl text-orange-600"></i>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-orange-600">98.5%</div>
+                                <div class="text-sm text-gray-500">Security Score</div>
+                            </div>
+                        </div>
+                        <div class="text-xs text-green-600">
+                            <i class="fas fa-check mr-1"></i>All systems secure
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Quick Access -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <!-- Exam System Quick Access -->
+                    <div class="card p-6 border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900 dark:to-blue-900">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-clipboard-check text-2xl text-white"></i>
+                            </div>
+                            <div class="exam-badge">
+                                Live
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Advanced Exam System</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">AI-powered examination platform with blockchain verification and live monitoring</p>
+                        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-600">12</div>
+                                <div class="text-gray-500">Live Exams</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-blue-600">247</div>
+                                <div class="text-gray-500">Students</div>
+                            </div>
+                        </div>
+                        <button onclick="accessExamSystem()" class="w-full btn-primary">
+                            <i class="fas fa-rocket mr-2"></i>Access Exam System
+                        </button>
+                    </div>
+
+                    <!-- System Management -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4">System Management</h3>
+                        <div class="space-y-3">
+                            <button class="w-full btn-primary flex items-center justify-center py-3">
+                                <i class="fas fa-user-plus mr-2"></i>
+                                Add New User
+                            </button>
+                            <button class="w-full btn-primary flex items-center justify-center py-3">
+                                <i class="fas fa-plus mr-2"></i>
+                                Create Course
+                            </button>
+                            <button class="w-full btn-primary flex items-center justify-center py-3">
+                                <i class="fas fa-download mr-2"></i>
+                                Export Reports
+                            </button>
+                            <button class="w-full btn-primary flex items-center justify-center py-3">
+                                <i class="fas fa-broadcast-tower mr-2"></i>
+                                Send Announcement
+                            </button>
+                            <button class="w-full btn-secondary flex items-center justify-center py-3">
+                                <i class="fas fa-cog mr-2"></i>
+                                System Settings
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- System Status -->
+                    <div class="card p-6">
+                        <h3 class="text-lg font-semibold mb-4">System Status</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <i class="fas fa-server text-green-600 mr-2"></i>
+                                    <span class="text-sm">Web Servers</span>
+                                </div>
+                                <span class="status-badge status-online">Online</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <i class="fas fa-database text-green-600 mr-2"></i>
+                                    <span class="text-sm">Database</span>
+                                </div>
+                                <span class="status-badge status-online">Online</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <i class="fas fa-cloud text-green-600 mr-2"></i>
+                                    <span class="text-sm">Cloud Services</span>
+                                </div>
+                                <span class="status-badge status-online">Online</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <i class="fas fa-clipboard-check text-green-600 mr-2"></i>
+                                    <span class="text-sm">Exam System</span>
+                                </div>
+                                <span class="status-badge status-online">Online</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Continue with existing content structure... -->
+
+            </div>
+
+            <!-- Add existing sections here -->
+
+        </main>
+    </div>
+
+    <script>
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAuth();
+            initializeSidebar();
+            initializeDarkMode();
+            initializeSessionTimer();
+            initializeNotifications();
+            initializeInteractiveElements();
+        });
+
+        // Authentication check
+        function initializeAuth() {
+            const isAuthenticated = localStorage.getItem('isAuthenticated');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+            if (!isAuthenticated || currentUser.role !== 'administrator') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update user info
+            document.getElementById('userName').textContent = currentUser.name || 'System Administrator';
+        }
+
+        // Exam System Integration
+        function accessExamSystem() {
+            // Store current user data for exam system
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const userData = {
+                ...currentUser,
+                username: currentUser.name ? .toLowerCase().replace(/\s+/g, '.') || 'admin.user',
+                role: 'administrator',
+                track: 'all' // Admin can access all tracks
+            };
+
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            localStorage.setItem('examSystemAccess', 'true');
+            localStorage.setItem('previousPage', 'dashboard_administrator.html');
+
+            showToast('Accessing Advanced Exam System...', 'info');
+
+            // Navigate to exam system
+            setTimeout(() => {
+                window.location.href = 'exam_system.html';
+            }, 1000);
+        }
+
+        // Enhanced sidebar functionality
+        function initializeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const openSidebar = document.getElementById('openSidebar');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const toggleSidebar = document.getElementById('toggleSidebar');
+
+            // Mobile sidebar toggle
+            openSidebar ? .addEventListener('click', () => {
+                sidebar.classList.remove('mobile-hidden');
+                sidebarOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeSidebar ? .addEventListener('click', () => {
+                sidebar.classList.add('mobile-hidden');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+
+            sidebarOverlay ? .addEventListener('click', () => {
+                sidebar.classList.add('mobile-hidden');
+                sidebarOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+
+            // Desktop sidebar toggle
+            toggleSidebar ? .addEventListener('click', () => {
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                if (isCollapsed) {
+                    sidebar.classList.remove('collapsed');
+                    mainContent.classList.remove('sidebar-collapsed');
+                    localStorage.setItem('sidebarCollapsed', 'false');
+                } else {
+                    sidebar.classList.add('collapsed');
+                    mainContent.classList.add('sidebar-collapsed');
+                    localStorage.setItem('sidebarCollapsed', 'true');
+                }
+            });
+
+            // Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    // Skip if it's the exam system nav item (handled by onclick)
+                    if (item.onclick) return;
+
+                    // Remove active class from all items
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    // Add active class to clicked item
+                    item.classList.add('active');
+
+                    // Show corresponding section
+                    const section = item.dataset.section;
+                    if (section) showSection(section);
+
+                    // Handle special sections
+                    if (section === 'exam-monitoring') {
+                        showExamMonitoring();
+                    }
+
+                    // Close mobile sidebar after navigation
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.add('mobile-hidden');
+                        sidebarOverlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+
+            // Restore sidebar state
+            const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
+            if (sidebarCollapsed === 'true') {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('sidebar-collapsed');
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('mobile-hidden');
+                    sidebarOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Initialize mobile state
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('mobile-hidden');
+            }
+        }
+
+        // Live Exam Monitoring Modal
+        function showExamMonitoring() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-4xl w-full mx-4 max-h-96 overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold flex items-center">
+                                <i class="fas fa-eye text-blue-600 mr-2"></i>
+                                Live Exam Monitoring
+                            </h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="text-center p-4 bg-green-50 dark:bg-green-900 rounded-lg border border-green-200 dark:border-green-800">
+                                <div class="text-2xl font-bold text-green-600">12</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Active Exams</div>
+                                <div class="w-3 h-3 bg-green-500 rounded-full mx-auto mt-2 animate-pulse"></div>
+                            </div>
+                            <div class="text-center p-4 bg-blue-50 dark:bg-blue-900 rounded-lg border border-blue-200 dark:border-blue-800">
+                                <div class="text-2xl font-bold text-blue-600">247</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Students Online</div>
+                                <div class="text-xs text-blue-600 mt-1">All tracks</div>
+                            </div>
+                            <div class="text-center p-4 bg-purple-50 dark:bg-purple-900 rounded-lg border border-purple-200 dark:border-purple-800">
+                                <div class="text-2xl font-bold text-purple-600">AI</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Proctoring Active</div>
+                                <div class="text-xs text-purple-600 mt-1">98% accuracy</div>
+                            </div>
+                            <div class="text-center p-4 bg-red-50 dark:bg-red-900 rounded-lg border border-red-200 dark:border-red-800">
+                                <div class="text-2xl font-bold text-red-600">3</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Security Alerts</div>
+                                <div class="text-xs text-red-600 mt-1">Auto-resolved</div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-blue-800 dark:text-blue-200">Advanced Monitoring Available</p>
+                                    <p class="text-sm text-blue-600 dark:text-blue-400">Access full exam system for real-time proctoring, blockchain verification, and detailed analytics.</p>
+                                </div>
+                                <button onclick="accessExamSystem()" class="btn-primary">
+                                    <i class="fas fa-rocket mr-2"></i>Open Exam System
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Section switching with animation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('fade-in');
+            });
+
+            // Show selected section with animation
+            const targetSection = document.getElementById(`${sectionName}-section`);
+            if (targetSection) {
+                setTimeout(() => {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('fade-in');
+                }, 150);
+            }
+        }
+
+        // Dark mode
+        function initializeDarkMode() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+                darkModeIcon.className = 'fas fa-sun';
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                    darkModeIcon.className = 'fas fa-sun';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    darkModeIcon.className = 'fas fa-moon';
+                }
+            });
+
+            darkModeToggle ? .addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const isDark = document.documentElement.classList.contains('dark');
+                darkModeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                localStorage.setItem('darkMode', isDark);
+            });
+        }
+
+        // Session timer (60 minutes for admin)
+        function initializeSessionTimer() {
+            let timeLeft = 60 * 60; // 60 minutes in seconds
+            const timerElement = document.getElementById('sessionTimer');
+
+            const timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                // Warning at 10 minutes
+                if (timeLeft === 10 * 60) {
+                    showToast('Session will expire in 10 minutes. Save your work!', 'warning');
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showToast('Session expired. Please login again.', 'error');
+                    setTimeout(() => {
+                        localStorage.removeItem('isAuthenticated');
+                        localStorage.removeItem('currentUser');
+                        window.location.href = 'login.html';
+                    }, 2000);
+                }
+
+                timeLeft--;
+            }, 1000);
+        }
+
+        // Notifications
+        function initializeNotifications() {
+            // Simulate admin notifications including exam system updates
+            const notifications = [{
+                message: 'New user registration requires approval',
+                type: 'info',
+                delay: 5000
+            }, {
+                message: 'Exam system: 12 active examinations in progress',
+                type: 'info',
+                delay: 8000
+            }, {
+                message: 'System backup completed successfully',
+                type: 'success',
+                delay: 12000
+            }, {
+                message: 'AI proctoring detected 3 security incidents (auto-resolved)',
+                type: 'warning',
+                delay: 15000
+            }];
+
+            notifications.forEach(notification => {
+                setTimeout(() => {
+                    showToast(notification.message, notification.type);
+                }, notification.delay);
+            });
+
+            // Notification button click handler
+            document.getElementById('notificationBtn') ? .addEventListener('click', function() {
+                showNotificationModal();
+            });
+        }
+
+        // Interactive elements
+        function initializeInteractiveElements() {
+            // Real-time data updates
+            setInterval(updateRealTimeData, 30000); // Update every 30 seconds
+
+            // Button interactions
+            document.querySelectorAll('.btn-primary, .btn-secondary').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Card hover effects
+            document.querySelectorAll('.stats-card, .card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        }
+
+        // Update real-time data
+        function updateRealTimeData() {
+            // Simulate real-time updates for exam system
+            console.log('Updating real-time exam data...');
+        }
+
+        // Notification modal
+        function showNotificationModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full mx-4 max-h-96 overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">System Notifications</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 overflow-y-auto">
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3 p-3 bg-purple-50 dark:bg-purple-900 rounded-lg">
+                                <i class="fas fa-clipboard-check text-purple-600 mt-1"></i>
+                                <div>
+                                    <p class="font-medium">Exam System Alert</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">12 active examinations with 247 students</p>
+                                    <p class="text-xs text-gray-500 mt-1">Real-time • AI monitoring active</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-3 bg-red-50 dark:bg-red-900 rounded-lg">
+                                <i class="fas fa-exclamation-circle text-red-600 mt-1"></i>
+                                <div>
+                                    <p class="font-medium">User Approval Required</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">5 new user registrations pending approval</p>
+                                    <p class="text-xs text-gray-500 mt-1">1 hour ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900 rounded-lg">
+                                <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                                <div>
+                                    <p class="font-medium">Backup Completed</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">System backup finished successfully</p>
+                                    <p class="text-xs text-gray-500 mt-1">4 hours ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+                        <button class="w-full btn-primary text-sm">View All Notifications</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Toast notifications
+        function showToast(message, type = 'info') {
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} mr-2"></i>
+                    <span class="flex-1">${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            // Auto remove after 7 seconds
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 7000);
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn') ? .addEventListener('click', () => {
+            showConfirmDialog('Are you sure you want to logout?', () => {
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('sidebarCollapsed');
+                showToast('Logged out successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            });
+        });
+
+        // Custom confirm dialog
+        function showConfirmDialog(message, onConfirm) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-question-circle text-2xl text-yellow-600"></i>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-6">${message}</p>
+                        <div class="flex justify-center space-x-3">
+                            <button class="px-6 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onclick="this.closest('.fixed').remove()">Cancel</button>
+                            <button class="px-6 py-2 bg-red-500 text-white hover:bg-red-600 rounded-lg transition-colors" onclick="this.closest('.fixed').remove(); (${onConfirm})()">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + B to toggle sidebar
+            if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                e.preventDefault();
+                document.getElementById('toggleSidebar') ? .click();
+            }
+
+            // Ctrl/Cmd + D to toggle dark mode
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                e.preventDefault();
+                document.getElementById('darkModeToggle') ? .click();
+            }
+
+            // Ctrl/Cmd + N for notifications
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                document.getElementById('notificationBtn') ? .click();
+            }
+
+            // Ctrl/Cmd + E for exam system
+            if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+                e.preventDefault();
+                accessExamSystem();
+            }
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            const loadTime = performance.now();
+            console.log(`Admin dashboard loaded in ${Math.round(loadTime)}ms`);
+
+            if (loadTime > 3000) {
+                showToast('Dashboard loaded successfully', 'success');
+            }
+        });
+    </script>
+</body>
+
+</html>
