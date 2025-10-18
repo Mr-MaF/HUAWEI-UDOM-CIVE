@@ -474,6 +474,19 @@
                 transform: translateY(0);
             }
         }
+
+        .clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .clickable:hover {
+            transform: translateY(-2px);
+        }
+
+        .clickable:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -516,33 +529,33 @@
                 <div class="mb-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Learning</div>
                 <ul class="space-y-2">
                     <li>
-                        <div class="nav-item active flex items-center px-4 py-3" data-section="dashboard">
+                        <div class="nav-item active flex items-center px-4 py-3 clickable" data-section="dashboard">
                             <i class="fas fa-home w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Dashboard</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="courses">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="courses">
                             <i class="fas fa-graduation-cap w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">My Courses</span>
                             <span class="nav-badge ml-auto notification-badge nav-text">4</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="assignments">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="assignments">
                             <i class="fas fa-tasks w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Assignments</span>
                             <span class="nav-badge ml-auto notification-badge nav-text">3</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="labs">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="labs">
                             <i class="fas fa-flask w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Virtual Labs</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="grades">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="grades">
                             <i class="fas fa-chart-line w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Grades & Progress</span>
                         </div>
@@ -552,32 +565,32 @@
                 <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Examinations</div>
                 <ul class="space-y-2">
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="available-exams">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="available-exams">
                             <i class="fas fa-clipboard-list w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Available Exams</span>
                             <span class="nav-badge ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full nav-text">2</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="exam-results">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="exam-results">
                             <i class="fas fa-chart-bar w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">My Results</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="exam-history">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="exam-history">
                             <i class="fas fa-history w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Exam History</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="practice-tests">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="practice-tests">
                             <i class="fas fa-dumbbell w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Practice Tests</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" onclick="openExamSystem()">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" onclick="openExamSystem()">
                             <i class="fas fa-external-link-alt w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Full Exam System</span>
                         </div>
@@ -587,25 +600,25 @@
                 <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Resources</div>
                 <ul class="space-y-2">
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="materials">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="materials">
                             <i class="fas fa-book w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Study Materials</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="certificates">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="certificates">
                             <i class="fas fa-certificate w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Certificates</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="calendar">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="calendar">
                             <i class="fas fa-calendar w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Schedule</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="library">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="library">
                             <i class="fas fa-book-open w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Digital Library</span>
                         </div>
@@ -615,19 +628,19 @@
                 <div class="my-4 text-xs font-semibold text-gray-500 uppercase tracking-wider nav-text">Support</div>
                 <ul class="space-y-2">
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="help">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="help">
                             <i class="fas fa-question-circle w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Help & FAQ</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="issues">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="issues">
                             <i class="fas fa-exclamation-circle w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Report Issue</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3" data-section="profile">
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="profile">
                             <i class="fas fa-user w-5 h-5 mr-3 flex-shrink-0"></i>
                             <span class="nav-text">Profile Settings</span>
                         </div>
@@ -637,7 +650,7 @@
 
             <!-- Logout -->
             <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-                <button class="w-full flex items-center justify-center px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-colors" id="logoutBtn">
+                <button class="w-full flex items-center justify-center px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-colors clickable" id="logoutBtn">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     <span class="nav-text">Logout</span>
                 </button>
@@ -654,10 +667,10 @@
         <header class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30">
             <div class="flex items-center justify-between p-4">
                 <div class="flex items-center">
-                    <button class="md:hidden mr-4 text-gray-600 hover:text-gray-800" id="openSidebar">
+                    <button class="md:hidden mr-4 text-gray-600 hover:text-gray-800 clickable" id="openSidebar">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <button class="hidden md:block mr-4 text-gray-600 hover:text-gray-800" id="toggleSidebar">
+                    <button class="hidden md:block mr-4 text-gray-600 hover:text-gray-800 clickable" id="toggleSidebar">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                     <div>
@@ -667,16 +680,16 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative" id="notificationBtn">
+                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg relative clickable" id="notificationBtn">
                         <i class="fas fa-bell"></i>
                         <span class="absolute -top-1 -right-1 notification-badge">3</span>
                     </button>
 
-                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" id="darkModeToggle">
+                    <button class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg clickable" id="darkModeToggle">
                         <i class="fas fa-moon" id="darkModeIcon"></i>
                     </button>
 
-                    <a href="index.html" class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg" title="Home">
+                    <a href="index.html" class="p-2 text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg clickable" title="Home">
                         <i class="fas fa-home"></i>
                     </a>
                 </div>
@@ -783,7 +796,7 @@
                         <div class="card p-6">
                             <div class="flex justify-between items-center mb-6">
                                 <h3 class="text-xl font-semibold">Current Courses</h3>
-                                <button class="btn-primary text-sm px-4 py-2" onclick="showSection('courses')">View All</button>
+                                <button class="btn-primary text-sm px-4 py-2 clickable" onclick="showSection('courses')">View All</button>
                             </div>
                             <div class="space-y-6">
                                 <div class="course-card p-6">
@@ -820,7 +833,7 @@
                                             <p class="text-sm text-gray-600">Next: Lab 5 - Data Structures</p>
                                             <p class="text-xs text-gray-500">Due in 3 days</p>
                                         </div>
-                                        <button class="btn-primary text-sm px-4 py-2">Continue</button>
+                                        <button class="btn-primary text-sm px-4 py-2 clickable" onclick="continueCourse('python')">Continue</button>
                                     </div>
                                 </div>
 
@@ -858,7 +871,7 @@
                                             <p class="text-sm text-gray-600">Next: Assignment 3 - Firewall Config</p>
                                             <p class="text-xs text-gray-500">Due in 5 days</p>
                                         </div>
-                                        <button class="btn-primary text-sm px-4 py-2">Continue</button>
+                                        <button class="btn-primary text-sm px-4 py-2 clickable" onclick="continueCourse('network')">Continue</button>
                                     </div>
                                 </div>
                             </div>
@@ -899,19 +912,19 @@
                         <div class="card p-6">
                             <h3 class="text-lg font-semibold mb-4">Quick Actions</h3>
                             <div class="space-y-3">
-                                <button class="w-full btn-primary flex items-center justify-center py-3" onclick="showSection('available-exams')">
+                                <button class="w-full btn-primary flex items-center justify-center py-3 clickable" onclick="showSection('available-exams')">
                                     <i class="fas fa-clipboard-list mr-2"></i>
                                     View Available Exams
                                 </button>
-                                <button class="w-full btn-primary flex items-center justify-center py-3" onclick="showSection('labs')">
+                                <button class="w-full btn-primary flex items-center justify-center py-3 clickable" onclick="showSection('labs')">
                                     <i class="fas fa-play mr-2"></i>
                                     Join Virtual Lab
                                 </button>
-                                <button class="w-full btn-primary flex items-center justify-center py-3" onclick="showSection('materials')">
+                                <button class="w-full btn-primary flex items-center justify-center py-3 clickable" onclick="showSection('materials')">
                                     <i class="fas fa-download mr-2"></i>
                                     Download Materials
                                 </button>
-                                <button class="w-full btn-primary flex items-center justify-center py-3" onclick="showSection('calendar')">
+                                <button class="w-full btn-primary flex items-center justify-center py-3 clickable" onclick="showSection('calendar')">
                                     <i class="fas fa-calendar mr-2"></i>
                                     View Schedule
                                 </button>
@@ -926,7 +939,7 @@
                                 </div>
                                 <h4 class="font-semibold mb-2">Achievement Unlocked!</h4>
                                 <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Coding Enthusiast - Complete 5 programming labs</p>
-                                <button class="btn-primary text-sm px-4 py-2" onclick="showSection('certificates')">View All Badges</button>
+                                <button class="btn-primary text-sm px-4 py-2 clickable" onclick="showSection('certificates')">View All Badges</button>
                             </div>
                         </div>
                     </div>
@@ -942,10 +955,10 @@
                             <p class="text-gray-600 dark:text-gray-400">Track-specific examinations with AI proctoring and blockchain verification</p>
                         </div>
                         <div class="flex space-x-3">
-                            <button class="btn-secondary" onclick="refreshExams()">
+                            <button class="btn-secondary clickable" onclick="refreshExams()">
                                 <i class="fas fa-sync-alt mr-2"></i>Refresh
                             </button>
-                            <button class="btn-primary" onclick="openExamSystem()">
+                            <button class="btn-primary clickable" onclick="openExamSystem()">
                                 <i class="fas fa-external-link-alt mr-2"></i>Full Exam System
                             </button>
                         </div>
@@ -1009,10 +1022,10 @@
                                     <span class="text-gray-500">25 questions</span>
                                 </div>
                                 <div class="flex space-x-2">
-                                    <button class="btn-secondary text-sm px-4 py-2" onclick="showExamPreview('exam1')">
+                                    <button class="btn-secondary text-sm px-4 py-2 clickable" onclick="showExamPreview('exam1')">
                                         <i class="fas fa-eye mr-2"></i>Preview
                                     </button>
-                                    <button class="btn-primary" onclick="startExam('exam1')">
+                                    <button class="btn-primary clickable" onclick="startExam('exam1')">
                                         <i class="fas fa-play mr-2"></i>Start Exam
                                     </button>
                                 </div>
@@ -1056,7 +1069,7 @@
                                     <span class="text-gray-500">20 questions</span>
                                 </div>
                                 <div class="flex space-x-2">
-                                    <button class="btn-secondary text-sm px-4 py-2" onclick="showExamPreview('exam3')">
+                                    <button class="btn-secondary text-sm px-4 py-2 clickable" onclick="showExamPreview('exam3')">
                                         <i class="fas fa-eye mr-2"></i>Preview
                                     </button>
                                     <button class="btn-primary opacity-50 cursor-not-allowed" disabled>
@@ -1078,14 +1091,14 @@
                             <p class="text-gray-600 dark:text-gray-400">Manage your enrolled courses and track progress</p>
                         </div>
                         <div class="flex space-x-3">
-                            <select class="input-field">
+                            <select class="input-field" id="courseFilter">
                                 <option>All Tracks</option>
                                 <option>Computing</option>
                                 <option>Networking</option>
                                 <option>Cloud Computing</option>
                                 <option>Innovation</option>
                             </select>
-                            <button class="btn-primary">Browse Courses</button>
+                            <button class="btn-primary clickable" onclick="browseCourses()">Browse Courses</button>
                         </div>
                     </div>
 
@@ -1119,8 +1132,8 @@
                                 </div>
 
                                 <div class="flex space-x-2">
-                                    <button class="flex-1 btn-primary text-sm py-2">Continue Learning</button>
-                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <button class="flex-1 btn-primary text-sm py-2 clickable" onclick="continueCourse('python')">Continue Learning</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="bookmarkCourse('python')">
                                         <i class="fas fa-bookmark"></i>
                                     </button>
                                 </div>
@@ -1156,8 +1169,8 @@
                                 </div>
 
                                 <div class="flex space-x-2">
-                                    <button class="flex-1 btn-primary text-sm py-2">Continue Learning</button>
-                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <button class="flex-1 btn-primary text-sm py-2 clickable" onclick="continueCourse('network')">Continue Learning</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="bookmarkCourse('network')">
                                         <i class="fas fa-bookmark"></i>
                                     </button>
                                 </div>
@@ -1193,8 +1206,8 @@
                                 </div>
 
                                 <div class="flex space-x-2">
-                                    <button class="flex-1 btn-primary text-sm py-2">Continue Learning</button>
-                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <button class="flex-1 btn-primary text-sm py-2 clickable" onclick="continueCourse('cloud')">Continue Learning</button>
+                                    <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="bookmarkCourse('cloud')">
                                         <i class="fas fa-bookmark"></i>
                                     </button>
                                 </div>
@@ -1213,7 +1226,7 @@
                             <p class="text-gray-600 dark:text-gray-400">Track your assignments and submission deadlines</p>
                         </div>
                         <div class="flex space-x-3">
-                            <select class="input-field">
+                            <select class="input-field" id="assignmentFilter">
                                 <option>All Status</option>
                                 <option>Pending</option>
                                 <option>Submitted</option>
@@ -1248,8 +1261,8 @@
                                         </div>
                                     </div>
                                     <div class="flex space-x-3">
-                                        <button class="btn-primary flex-1">Start Assignment</button>
-                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <button class="btn-primary flex-1 clickable" onclick="startAssignment('python-assignment-4')">Start Assignment</button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="downloadInstructions('python-assignment-4')">
                                             <i class="fas fa-download mr-2"></i>Instructions
                                         </button>
                                     </div>
@@ -1274,8 +1287,8 @@
                                         </div>
                                     </div>
                                     <div class="flex space-x-3">
-                                        <button class="btn-primary flex-1">Take Quiz</button>
-                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <button class="btn-primary flex-1 clickable" onclick="takeQuiz('network-quiz')">Take Quiz</button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="downloadStudyGuide('network-quiz')">
                                             <i class="fas fa-book mr-2"></i>Study Guide
                                         </button>
                                     </div>
@@ -1308,8 +1321,8 @@
                                         </div>
                                     </div>
                                     <div class="flex space-x-3">
-                                        <button class="btn-primary flex-1">View Feedback</button>
-                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <button class="btn-primary flex-1 clickable" onclick="viewFeedback('python-assignment-3')">View Feedback</button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="downloadAssignment('python-assignment-3')">
                                             <i class="fas fa-download mr-2"></i>Download
                                         </button>
                                     </div>
@@ -1334,8 +1347,8 @@
                                         </div>
                                     </div>
                                     <div class="flex space-x-3">
-                                        <button class="btn-primary flex-1">Review Results</button>
-                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <button class="btn-primary flex-1 clickable" onclick="reviewResults('network-quiz')">Review Results</button>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="retakeQuiz('network-quiz')">
                                             <i class="fas fa-redo mr-2"></i>Retake
                                         </button>
                                     </div>
@@ -1359,7 +1372,7 @@
                                 <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                                 <span class="text-sm text-gray-500">Lab servers online</span>
                             </div>
-                            <button class="btn-primary">Request New Lab</button>
+                            <button class="btn-primary clickable" onclick="requestNewLab()">Request New Lab</button>
                         </div>
                     </div>
 
@@ -1389,8 +1402,8 @@
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <button class="btn-primary flex-1">Access Lab</button>
-                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <button class="btn-primary flex-1 clickable" onclick="accessLab('python')">Access Lab</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="openLabInfo('python')">
                                     <i class="fas fa-external-link-alt"></i>
                                 </button>
                             </div>
@@ -1422,8 +1435,8 @@
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <button class="btn-primary flex-1">Launch Lab</button>
-                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <button class="btn-primary flex-1 clickable" onclick="launchLab('network')">Launch Lab</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="showLabInfo('network')">
                                     <i class="fas fa-info-circle"></i>
                                 </button>
                             </div>
@@ -1454,8 +1467,8 @@
                                 </div>
                             </div>
                             <div class="flex space-x-2">
-                                <button class="btn-primary flex-1">Join Queue</button>
-                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <button class="btn-primary flex-1 clickable" onclick="joinLabQueue('aws')">Join Queue</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="bookmarkLab('aws')">
                                     <i class="fas fa-bookmark"></i>
                                 </button>
                             </div>
@@ -1486,7 +1499,7 @@
                             </div>
                             <div class="flex space-x-2">
                                 <button class="btn-primary flex-1 opacity-50 cursor-not-allowed" disabled>Unavailable</button>
-                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="notifyWhenAvailable('cybersecurity')">
                                     <i class="fas fa-bell"></i>
                                 </button>
                             </div>
@@ -1531,12 +1544,12 @@
                             <p class="text-gray-600 dark:text-gray-400">Track your academic performance and learning progress</p>
                         </div>
                         <div class="flex space-x-3">
-                            <select class="input-field">
+                            <select class="input-field" id="semesterFilter">
                                 <option>Current Semester</option>
                                 <option>Previous Semester</option>
                                 <option>All Time</option>
                             </select>
-                            <button class="btn-primary">Generate Transcript</button>
+                            <button class="btn-primary clickable" onclick="generateTranscript()">Generate Transcript</button>
                         </div>
                     </div>
 
@@ -1614,7 +1627,7 @@
                                         </td>
                                         <td class="py-4 px-4">4</td>
                                         <td class="py-4 px-4">
-                                            <button class="text-blue-600 hover:underline text-sm">View Details</button>
+                                            <button class="text-blue-600 hover:underline text-sm clickable" onclick="viewCourseDetails('python')">View Details</button>
                                         </td>
                                     </tr>
                                     <tr class="border-b border-gray-100 dark:border-gray-700">
@@ -1640,7 +1653,7 @@
                                         </td>
                                         <td class="py-4 px-4">3</td>
                                         <td class="py-4 px-4">
-                                            <button class="text-blue-600 hover:underline text-sm">View Details</button>
+                                            <button class="text-blue-600 hover:underline text-sm clickable" onclick="viewCourseDetails('network')">View Details</button>
                                         </td>
                                     </tr>
                                     <tr class="border-b border-gray-100 dark:border-gray-700">
@@ -1666,7 +1679,7 @@
                                         </td>
                                         <td class="py-4 px-4">3</td>
                                         <td class="py-4 px-4">
-                                            <button class="text-blue-600 hover:underline text-sm">View Details</button>
+                                            <button class="text-blue-600 hover:underline text-sm clickable" onclick="viewCourseDetails('cloud')">View Details</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1685,8 +1698,8 @@
                             <p class="text-gray-600 dark:text-gray-400">Access course materials, textbooks, and resources</p>
                         </div>
                         <div class="flex space-x-3">
-                            <input type="search" placeholder="Search materials..." class="input-field">
-                            <select class="input-field">
+                            <input type="search" placeholder="Search materials..." class="input-field" id="materialSearch">
+                            <select class="input-field" id="materialType">
                                 <option>All Types</option>
                                 <option>Videos</option>
                                 <option>PDFs</option>
@@ -1716,8 +1729,8 @@
                                 <span class="text-sm text-gray-500">2.3 MB</span>
                             </div>
                             <div class="flex space-x-2">
-                                <button class="btn-primary flex-1 text-sm">Download</button>
-                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <button class="btn-primary flex-1 text-sm clickable" onclick="downloadMaterial('python-guide')">Download</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="previewMaterial('python-guide')">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
@@ -1742,8 +1755,8 @@
                                 <span class="text-sm text-gray-500">HD Quality</span>
                             </div>
                             <div class="flex space-x-2">
-                                <button class="btn-primary flex-1 text-sm">Continue Watching</button>
-                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <button class="btn-primary flex-1 text-sm clickable" onclick="continueWatching('network-lecture')">Continue Watching</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="bookmarkMaterial('network-lecture')">
                                     <i class="fas fa-bookmark"></i>
                                 </button>
                             </div>
@@ -1768,8 +1781,8 @@
                                 <span class="text-sm text-gray-500">1.1 MB</span>
                             </div>
                             <div class="flex space-x-2">
-                                <button class="btn-primary flex-1 text-sm">Download</button>
-                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <button class="btn-primary flex-1 text-sm clickable" onclick="downloadMaterial('python-code')">Download</button>
+                                <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 clickable" onclick="openMaterial('python-code')">
                                     <i class="fas fa-external-link-alt"></i>
                                 </button>
                             </div>
@@ -1790,7 +1803,7 @@
                                 <span class="text-sm">These results are private to your account</span>
                             </div>
                         </div>
-                        <button onclick="exportResults()" class="btn-primary">
+                        <button class="btn-primary clickable" onclick="exportResults()">
                             <i class="fas fa-download mr-2"></i>Export Results
                         </button>
                     </div>
@@ -1852,13 +1865,13 @@
                             <p class="text-gray-600 dark:text-gray-400">Complete history of all your examinations</p>
                         </div>
                         <div class="flex space-x-3">
-                            <select class="input-field">
+                            <select class="input-field" id="examTrackFilter">
                                 <option>All Tracks</option>
                                 <option>Computing</option>
                                 <option>Networking</option>
                                 <option>Cloud Computing</option>
                             </select>
-                            <button class="btn-primary">Generate Report</button>
+                            <button class="btn-primary clickable" onclick="generateReport()">Generate Report</button>
                         </div>
                     </div>
 
@@ -1911,7 +1924,7 @@
                             <h2 class="text-2xl font-bold">Practice Tests</h2>
                             <p class="text-gray-600 dark:text-gray-400">Prepare for your exams with practice sessions</p>
                         </div>
-                        <button class="btn-primary">
+                        <button class="btn-primary clickable" onclick="createCustomPractice()">
                             <i class="fas fa-plus mr-2"></i>Create Custom Practice
                         </button>
                     </div>
@@ -1935,7 +1948,7 @@
                                 <span class="track-badge track-computing">Computing</span>
                                 <span class="text-sm text-gray-500">Beginner</span>
                             </div>
-                            <button class="btn-primary w-full">Start Practice</button>
+                            <button class="btn-primary w-full clickable" onclick="startPractice('python-quiz')">Start Practice</button>
                         </div>
 
                         <!-- Practice Test 2 -->
@@ -1956,7 +1969,7 @@
                                 <span class="track-badge track-networking">Networking</span>
                                 <span class="text-sm text-gray-500">Intermediate</span>
                             </div>
-                            <button class="btn-primary w-full">Start Practice</button>
+                            <button class="btn-primary w-full clickable" onclick="startPractice('network-quiz')">Start Practice</button>
                         </div>
 
                         <!-- Practice Test 3 -->
@@ -1977,7 +1990,7 @@
                                 <span class="track-badge track-cloud-computing">Cloud Computing</span>
                                 <span class="text-sm text-gray-500">Advanced</span>
                             </div>
-                            <button class="btn-primary w-full">Start Practice</button>
+                            <button class="btn-primary w-full clickable" onclick="startPractice('cloud-quiz')">Start Practice</button>
                         </div>
                     </div>
                 </div>
@@ -2039,6 +2052,7 @@
             initializeNotifications();
             initializeInteractiveElements();
             loadExamData();
+            initializeEventListeners();
         });
 
         // Authentication check
@@ -2355,6 +2369,146 @@
             });
         }
 
+        // Initialize event listeners for all interactive elements
+        function initializeEventListeners() {
+            // Add click event listeners to all buttons with the clickable class
+            document.querySelectorAll('.clickable').forEach(element => {
+                element.addEventListener('click', function() {
+                    // Add a visual feedback effect
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Add functionality to select elements
+            document.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', function() {
+                    showToast(`Filter updated: ${this.value}`, 'info');
+                });
+            });
+
+            // Add functionality to search inputs
+            document.querySelectorAll('input[type="search"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value.length > 2) {
+                        showToast(`Searching for: ${this.value}`, 'info');
+                    }
+                });
+            });
+        }
+
+        // Course-related functions
+        function continueCourse(courseId) {
+            showToast(`Continuing ${courseId} course...`, 'info');
+            // In a real app, this would redirect to the course content
+        }
+
+        function bookmarkCourse(courseId) {
+            showToast(`Course bookmarked: ${courseId}`, 'success');
+        }
+
+        function browseCourses() {
+            showToast('Opening course catalog...', 'info');
+        }
+
+        // Assignment-related functions
+        function startAssignment(assignmentId) {
+            showToast(`Starting assignment: ${assignmentId}`, 'info');
+        }
+
+        function downloadInstructions(assignmentId) {
+            showToast(`Downloading instructions for: ${assignmentId}`, 'info');
+        }
+
+        function takeQuiz(quizId) {
+            showToast(`Starting quiz: ${quizId}`, 'info');
+        }
+
+        function downloadStudyGuide(quizId) {
+            showToast(`Downloading study guide for: ${quizId}`, 'info');
+        }
+
+        function viewFeedback(assignmentId) {
+            showToast(`Viewing feedback for: ${assignmentId}`, 'info');
+        }
+
+        function downloadAssignment(assignmentId) {
+            showToast(`Downloading assignment: ${assignmentId}`, 'info');
+        }
+
+        function reviewResults(quizId) {
+            showToast(`Reviewing results for: ${quizId}`, 'info');
+        }
+
+        function retakeQuiz(quizId) {
+            showToast(`Retaking quiz: ${quizId}`, 'info');
+        }
+
+        // Lab-related functions
+        function accessLab(labId) {
+            showToast(`Accessing lab: ${labId}`, 'info');
+        }
+
+        function openLabInfo(labId) {
+            showToast(`Opening lab info for: ${labId}`, 'info');
+        }
+
+        function launchLab(labId) {
+            showToast(`Launching lab: ${labId}`, 'info');
+        }
+
+        function showLabInfo(labId) {
+            showToast(`Showing lab info for: ${labId}`, 'info');
+        }
+
+        function joinLabQueue(labId) {
+            showToast(`Joining queue for: ${labId}`, 'info');
+        }
+
+        function bookmarkLab(labId) {
+            showToast(`Lab bookmarked: ${labId}`, 'success');
+        }
+
+        function requestNewLab() {
+            showToast('Requesting new lab...', 'info');
+        }
+
+        function notifyWhenAvailable(labId) {
+            showToast(`You will be notified when ${labId} lab is available`, 'info');
+        }
+
+        // Grades-related functions
+        function generateTranscript() {
+            showToast('Generating transcript...', 'info');
+        }
+
+        function viewCourseDetails(courseId) {
+            showToast(`Viewing details for: ${courseId}`, 'info');
+        }
+
+        // Materials-related functions
+        function downloadMaterial(materialId) {
+            showToast(`Downloading material: ${materialId}`, 'info');
+        }
+
+        function previewMaterial(materialId) {
+            showToast(`Previewing material: ${materialId}`, 'info');
+        }
+
+        function continueWatching(materialId) {
+            showToast(`Continuing video: ${materialId}`, 'info');
+        }
+
+        function bookmarkMaterial(materialId) {
+            showToast(`Material bookmarked: ${materialId}`, 'success');
+        }
+
+        function openMaterial(materialId) {
+            showToast(`Opening material: ${materialId}`, 'info');
+        }
+
         // Exam system integration functions
         function openExamSystem() {
             showToast('Opening Full Exam System...', 'info');
@@ -2442,6 +2596,23 @@
             setTimeout(() => {
                 showToast('Results exported successfully!', 'success');
             }, 1500);
+        }
+
+        function generateReport() {
+            showToast('Generating exam report...', 'info');
+            // Simulate report generation
+            setTimeout(() => {
+                showToast('Report generated successfully!', 'success');
+            }, 1500);
+        }
+
+        // Practice tests functions
+        function startPractice(testId) {
+            showToast(`Starting practice test: ${testId}`, 'info');
+        }
+
+        function createCustomPractice() {
+            showToast('Creating custom practice test...', 'info');
         }
 
         // Notification modal
