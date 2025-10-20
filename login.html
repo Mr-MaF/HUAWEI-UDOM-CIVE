@@ -861,9 +861,31 @@
             showToast('Authentication successful! Redirecting to dashboard...', 'success');
             document.getElementById('loginBtn').classList.add('success-pulse');
 
-            // Redirect to dashboard
+            // Store ALL required authentication data
+            const userData = {
+                name: getDisplayName(username),
+                role: role,
+                email: username.includes('@') ? username : `${username}@udom.ac.tz`,
+                username: username,
+                loginTime: new Date().toISOString()
+            };
+
+            // Set all required localStorage items
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            localStorage.setItem('sessionId', generateSessionId());
+            localStorage.setItem('lastActivity', Date.now().toString());
+
+            console.log('✅ Login successful - Stored data:', {
+                isAuthenticated: localStorage.getItem('isAuthenticated'),
+                currentUser: localStorage.getItem('currentUser'),
+                sessionId: localStorage.getItem('sessionId')
+            });
+
+            // Redirect to dashboard after short delay
             setTimeout(() => {
                 const dashboardUrl = `dashboard_${role}.html`;
+                console.log(`🔄 Redirecting to: ${dashboardUrl}`);
                 window.location.href = dashboardUrl;
             }, 1500);
         }
