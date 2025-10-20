@@ -590,9 +590,9 @@
                         </div>
                     </li>
                     <li>
-                        <div class="nav-item flex items-center px-4 py-3 clickable" onclick="openExamSystem()">
-                            <i class="fas fa-external-link-alt w-5 h-5 mr-3 flex-shrink-0"></i>
-                            <span class="nav-text">Full Exam System</span>
+                        <div class="nav-item flex items-center px-4 py-3 clickable" data-section="exam-system">
+                            <i class="fas fa-desktop w-5 h-5 mr-3 flex-shrink-0"></i>
+                            <span class="nav-text">Exam System</span>
                         </div>
                     </li>
                 </ul>
@@ -1996,6 +1996,35 @@
                 </div>
             </div>
 
+            <!-- Exam System Section -->
+            <div id="exam-system-section" class="section hidden fade-in">
+                <div class="card p-6 text-center">
+                    <h2 class="text-2xl font-bold mb-4">Exam System</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">Access the integrated examination system for taking exams, viewing results, and managing exam-related activities.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="card p-4">
+                            <i class="fas fa-clipboard-check text-3xl text-blue-600 mb-3"></i>
+                            <h3 class="font-semibold mb-2">Take Exams</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Access available examinations with AI proctoring</p>
+                        </div>
+                        <div class="card p-4">
+                            <i class="fas fa-chart-line text-3xl text-green-600 mb-3"></i>
+                            <h3 class="font-semibold mb-2">View Results</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Check your exam results and performance analytics</p>
+                        </div>
+                        <div class="card p-4">
+                            <i class="fas fa-history text-3xl text-purple-600 mb-3"></i>
+                            <h3 class="font-semibold mb-2">Exam History</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Review your complete examination history</p>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="openExamSystem()">
+                        <i class="fas fa-external-link-alt mr-2"></i>
+                        Launch Full Exam System
+                    </button>
+                </div>
+            </div>
+
             <!-- Add placeholder sections for remaining items -->
             <div id="certificates-section" class="section hidden fade-in">
                 <div class="card p-6 text-center">
@@ -2060,13 +2089,41 @@
             const isAuthenticated = localStorage.getItem('isAuthenticated');
             const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
 
+            console.log('🔐 Authentication Debug:', {
+                isAuthenticated: isAuthenticated,
+                currentUser: currentUser,
+                userRole: currentUser.role,
+                localStorageContents: {
+                    isAuthenticated: localStorage.getItem('isAuthenticated'),
+                    currentUser: localStorage.getItem('currentUser'),
+                    sessionId: localStorage.getItem('sessionId')
+                }
+            });
+
             if (!isAuthenticated || currentUser.role !== 'student') {
+                console.log('❌ Redirecting to login - Reason:', !isAuthenticated ? 'Not authenticated' : `Wrong role: ${currentUser.role} (expected: student)`);
+
+                // Show what's in localStorage for debugging
+                console.log('📋 localStorage contents:', {
+                    isAuthenticated: localStorage.getItem('isAuthenticated'),
+                    currentUser: localStorage.getItem('currentUser')
+                });
+
                 window.location.href = 'login.html';
                 return;
             }
 
             // Update user info
             document.getElementById('userName').textContent = currentUser.name || 'Student User';
+
+            // Update user avatar
+            const userAvatar = document.querySelector('.user-avatar');
+            if (userAvatar && currentUser.name) {
+                const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                userAvatar.textContent = initials;
+            }
+
+            console.log('✅ Authentication successful!');
         }
 
         // Load exam data
@@ -2107,37 +2164,45 @@
             const toggleSidebar = document.getElementById('toggleSidebar');
 
             // Mobile sidebar toggle
-            openSidebar ? .addEventListener('click', () => {
-                sidebar.classList.remove('mobile-hidden');
-                sidebarOverlay.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            });
+            if (openSidebar) {
+                openSidebar.addEventListener('click', () => {
+                    sidebar.classList.remove('mobile-hidden');
+                    sidebarOverlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
 
-            closeSidebar ? .addEventListener('click', () => {
-                sidebar.classList.add('mobile-hidden');
-                sidebarOverlay.classList.remove('show');
-                document.body.style.overflow = '';
-            });
+            if (closeSidebar) {
+                closeSidebar.addEventListener('click', () => {
+                    sidebar.classList.add('mobile-hidden');
+                    sidebarOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                });
+            }
 
-            sidebarOverlay ? .addEventListener('click', () => {
-                sidebar.classList.add('mobile-hidden');
-                sidebarOverlay.classList.remove('show');
-                document.body.style.overflow = '';
-            });
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', () => {
+                    sidebar.classList.add('mobile-hidden');
+                    sidebarOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                });
+            }
 
             // Desktop sidebar toggle (collapse/expand)
-            toggleSidebar ? .addEventListener('click', () => {
-                const isCollapsed = sidebar.classList.contains('collapsed');
-                if (isCollapsed) {
-                    sidebar.classList.remove('collapsed');
-                    mainContent.classList.remove('sidebar-collapsed');
-                    localStorage.setItem('sidebarCollapsed', 'false');
-                } else {
-                    sidebar.classList.add('collapsed');
-                    mainContent.classList.add('sidebar-collapsed');
-                    localStorage.setItem('sidebarCollapsed', 'true');
-                }
-            });
+            if (toggleSidebar) {
+                toggleSidebar.addEventListener('click', () => {
+                    const isCollapsed = sidebar.classList.contains('collapsed');
+                    if (isCollapsed) {
+                        sidebar.classList.remove('collapsed');
+                        mainContent.classList.remove('sidebar-collapsed');
+                        localStorage.setItem('sidebarCollapsed', 'false');
+                    } else {
+                        sidebar.classList.add('collapsed');
+                        mainContent.classList.add('sidebar-collapsed');
+                        localStorage.setItem('sidebarCollapsed', 'true');
+                    }
+                });
+            }
 
             // Restore sidebar state
             const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
@@ -2146,9 +2211,12 @@
                 mainContent.classList.add('sidebar-collapsed');
             }
 
-            // Navigation
+            // Navigation - Fixed to properly handle clicks
             document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', () => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
                     // Remove active class from all items
                     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
                     // Add active class to clicked item
@@ -2158,6 +2226,7 @@
                     const section = item.dataset.section;
                     if (section) {
                         showSection(section);
+                        showToast(`Navigated to ${section.replace('-', ' ')}`, 'info');
                     }
 
                     // Close mobile sidebar after navigation
@@ -2218,7 +2287,8 @@
                 'available-exams': 'Available Exams',
                 'exam-results': 'My Exam Results',
                 'exam-history': 'Exam History',
-                'practice-tests': 'Practice Tests'
+                'practice-tests': 'Practice Tests',
+                'exam-system': 'Exam System'
             };
 
             document.title = `${titles[sectionName] || 'Student Dashboard'} - HUAWEI-UDOM Portal`;
@@ -2229,29 +2299,32 @@
             const darkModeToggle = document.getElementById('darkModeToggle');
             const darkModeIcon = document.getElementById('darkModeIcon');
 
-            // Check saved preference
-            const savedDarkMode = localStorage.getItem('darkMode');
+            // Check system preference
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.documentElement.classList.add('dark');
-                darkModeIcon.className = 'fas fa-sun';
+                if (darkModeIcon) darkModeIcon.className = 'fas fa-sun';
             }
 
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
                 if (event.matches) {
                     document.documentElement.classList.add('dark');
-                    darkModeIcon.className = 'fas fa-sun';
+                    if (darkModeIcon) darkModeIcon.className = 'fas fa-sun';
                 } else {
                     document.documentElement.classList.remove('dark');
-                    darkModeIcon.className = 'fas fa-moon';
+                    if (darkModeIcon) darkModeIcon.className = 'fas fa-moon';
                 }
             });
 
-            darkModeToggle ? .addEventListener('click', () => {
-                document.documentElement.classList.toggle('dark');
-                const isDark = document.documentElement.classList.contains('dark');
-                darkModeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-                localStorage.setItem('darkMode', isDark);
-            });
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark');
+                    const isDark = document.documentElement.classList.contains('dark');
+                    if (darkModeIcon) {
+                        darkModeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                    }
+                    localStorage.setItem('darkMode', isDark);
+                });
+            }
         }
 
         // Session timer (30 minutes)
@@ -2262,7 +2335,9 @@
             const timer = setInterval(() => {
                 const minutes = Math.floor(timeLeft / 60);
                 const seconds = timeLeft % 60;
-                timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                if (timerElement) {
+                    timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
 
                 // Warning at 5 minutes
                 if (timeLeft === 5 * 60) {
@@ -2315,9 +2390,12 @@
             });
 
             // Notification button click handler
-            document.getElementById('notificationBtn') ? .addEventListener('click', function() {
-                showNotificationModal();
-            });
+            const notificationBtn = document.getElementById('notificationBtn');
+            if (notificationBtn) {
+                notificationBtn.addEventListener('click', function() {
+                    showNotificationModal();
+                });
+            }
         }
 
         // Interactive elements
@@ -2373,13 +2451,16 @@
         function initializeEventListeners() {
             // Add click event listeners to all buttons with the clickable class
             document.querySelectorAll('.clickable').forEach(element => {
-                element.addEventListener('click', function() {
-                    // Add a visual feedback effect
-                    this.style.transform = 'scale(0.98)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
+                // Skip nav-items as they have their own handlers
+                if (!element.classList.contains('nav-item')) {
+                    element.addEventListener('click', function(e) {
+                        // Add a visual feedback effect
+                        this.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    });
+                }
             });
 
             // Add functionality to select elements
@@ -2399,56 +2480,139 @@
             });
         }
 
-        // Course-related functions
+        // All the function implementations from your original code
         function continueCourse(courseId) {
             showToast(`Continuing ${courseId} course...`, 'info');
-            // In a real app, this would redirect to the course content
+            setTimeout(() => {
+                showSection('courses');
+                showToast(`Opened ${courseId} course`, 'success');
+            }, 1000);
         }
 
         function bookmarkCourse(courseId) {
-            showToast(`Course bookmarked: ${courseId}`, 'success');
+            let bookmarks = JSON.parse(localStorage.getItem('bookmarkedCourses') || '[]');
+            if (!bookmarks.includes(courseId)) {
+                bookmarks.push(courseId);
+                localStorage.setItem('bookmarkedCourses', JSON.stringify(bookmarks));
+                showToast(`Course bookmarked: ${courseId}`, 'success');
+            } else {
+                showToast('Course already bookmarked', 'info');
+            }
         }
 
         function browseCourses() {
             showToast('Opening course catalog...', 'info');
+            setTimeout(() => {
+                showSection('courses');
+                showToast('Course catalog loaded', 'success');
+            }, 1000);
         }
 
         // Assignment-related functions
         function startAssignment(assignmentId) {
             showToast(`Starting assignment: ${assignmentId}`, 'info');
+            showCustomModal('Opening Assignment', `You are about to start: ${assignmentId}`, [{
+                text: 'Cancel',
+                action: () => {}
+            }, {
+                text: 'Continue',
+                action: () => showToast(`Assignment ${assignmentId} opened successfully!`, 'success')
+            }]);
         }
 
         function downloadInstructions(assignmentId) {
             showToast(`Downloading instructions for: ${assignmentId}`, 'info');
+            setTimeout(() => {
+                showToast('Instructions downloaded successfully!', 'success');
+            }, 1500);
         }
 
         function takeQuiz(quizId) {
             showToast(`Starting quiz: ${quizId}`, 'info');
+            setTimeout(() => {
+                showToast(`Quiz ${quizId} is now available!`, 'success');
+            }, 1000);
         }
 
         function downloadStudyGuide(quizId) {
             showToast(`Downloading study guide for: ${quizId}`, 'info');
+            setTimeout(() => {
+                showToast('Study guide downloaded successfully!', 'success');
+            }, 1500);
         }
 
         function viewFeedback(assignmentId) {
             showToast(`Viewing feedback for: ${assignmentId}`, 'info');
+            showCustomModal('Assignment Feedback', `
+                <div class="grade-badge grade-a mb-4">A- (92%)</div>
+                <h4 class="font-semibold mb-2">Instructor Comments:</h4>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Excellent work on implementing the data structures. Your code is well-organized and demonstrates a strong understanding of the concepts.</p>
+            `, [{
+                text: 'Close',
+                action: () => {}
+            }]);
         }
 
         function downloadAssignment(assignmentId) {
             showToast(`Downloading assignment: ${assignmentId}`, 'info');
+            setTimeout(() => {
+                showToast('Assignment files downloaded successfully!', 'success');
+            }, 1500);
         }
 
         function reviewResults(quizId) {
             showToast(`Reviewing results for: ${quizId}`, 'info');
+            showCustomModal('Quiz Results', `
+                <div class="text-center mb-4">
+                    <div class="grade-badge grade-b mb-2">B+ (87%)</div>
+                    <p class="text-gray-600 dark:text-gray-400">Above average performance</p>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span>Correct Answers:</span>
+                        <span class="font-semibold">17/20</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Time Taken:</span>
+                        <span class="font-semibold">45 minutes</span>
+                    </div>
+                </div>
+            `, [{
+                text: 'Close',
+                action: () => {}
+            }]);
         }
 
         function retakeQuiz(quizId) {
-            showToast(`Retaking quiz: ${quizId}`, 'info');
+            showCustomConfirm(
+                'Retake Quiz',
+                'Are you sure you want to retake this quiz? Your previous score will be replaced.',
+                () => {
+                    showToast(`Starting retake for: ${quizId}`, 'info');
+                    setTimeout(() => {
+                        showToast('Quiz retake is now available!', 'success');
+                    }, 1000);
+                }
+            );
         }
 
         // Lab-related functions
         function accessLab(labId) {
             showToast(`Accessing lab: ${labId}`, 'info');
+            showCustomModal('Connecting to Lab', `
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-code text-2xl text-green-600"></i>
+                    </div>
+                    <p class="mb-4">Establishing secure connection to ${labId} environment...</p>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+                        <div class="bg-green-600 h-2 rounded-full animate-pulse" style="width: 75%"></div>
+                    </div>
+                </div>
+            `, [{
+                text: 'Continue to Lab',
+                action: () => showToast('Lab connection established!', 'success')
+            }]);
         }
 
         function openLabInfo(labId) {
@@ -2457,61 +2621,248 @@
 
         function launchLab(labId) {
             showToast(`Launching lab: ${labId}`, 'info');
+            setTimeout(() => {
+                showToast(`Lab ${labId} launched successfully!`, 'success');
+            }, 2000);
         }
 
         function showLabInfo(labId) {
-            showToast(`Showing lab info for: ${labId}`, 'info');
+            showCustomModal('Lab Information', `
+                <h4 class="font-semibold mb-4">${labId} Lab</h4>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between">
+                        <span>Available Slots:</span>
+                        <span>12/20</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Session Duration:</span>
+                        <span>3 hours</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Prerequisites:</span>
+                        <span>Basic networking knowledge</span>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                    <h5 class="font-medium mb-2">Tools Available:</h5>
+                    <ul class="text-sm list-disc list-inside space-y-1">
+                        <li>Cisco Packet Tracer</li>
+                        <li>GNS3 Network Simulator</li>
+                        <li>Wireshark</li>
+                        <li>Virtual Router Environment</li>
+                    </ul>
+                </div>
+            `, [{
+                text: 'Close',
+                action: () => {}
+            }]);
         }
 
         function joinLabQueue(labId) {
             showToast(`Joining queue for: ${labId}`, 'info');
+            setTimeout(() => {
+                showToast('Added to queue. You will be notified when a slot is available.', 'success');
+            }, 1500);
         }
 
         function bookmarkLab(labId) {
-            showToast(`Lab bookmarked: ${labId}`, 'success');
+            let bookmarks = JSON.parse(localStorage.getItem('bookmarkedLabs') || '[]');
+            if (!bookmarks.includes(labId)) {
+                bookmarks.push(labId);
+                localStorage.setItem('bookmarkedLabs', JSON.stringify(bookmarks));
+                showToast(`Lab bookmarked: ${labId}`, 'success');
+            } else {
+                showToast('Lab already bookmarked', 'info');
+            }
         }
 
         function requestNewLab() {
-            showToast('Requesting new lab...', 'info');
+            showCustomModal('Request New Lab', `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Lab Type</label>
+                        <select class="input-field w-full" id="labType">
+                            <option>Select lab type...</option>
+                            <option>Programming Environment</option>
+                            <option>Network Simulation</option>
+                            <option>Cybersecurity Sandbox</option>
+                            <option>Cloud Computing Platform</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Purpose</label>
+                        <textarea class="input-field w-full h-24" placeholder="Describe your lab requirements..." id="labPurpose"></textarea>
+                    </div>
+                </div>
+            `, [{
+                text: 'Cancel',
+                action: () => {}
+            }, {
+                text: 'Submit Request',
+                action: () => showToast('Lab request submitted successfully!', 'success')
+            }]);
         }
 
         function notifyWhenAvailable(labId) {
             showToast(`You will be notified when ${labId} lab is available`, 'info');
+            let notifications = JSON.parse(localStorage.getItem('labNotifications') || '[]');
+            if (!notifications.includes(labId)) {
+                notifications.push(labId);
+                localStorage.setItem('labNotifications', JSON.stringify(notifications));
+                setTimeout(() => {
+                    showToast('Notification preference saved!', 'success');
+                }, 1000);
+            }
         }
 
         // Grades-related functions
         function generateTranscript() {
             showToast('Generating transcript...', 'info');
+            setTimeout(() => {
+                showToast('Transcript generated successfully!', 'success');
+                showCustomModal('Transcript Ready', `
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-file-alt text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Transcript Ready</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Your academic transcript has been generated and is ready for download.</p>
+                    </div>
+                `, [{
+                    text: 'Close',
+                    action: () => {}
+                }, {
+                    text: 'Download',
+                    action: () => showToast('Transcript downloaded!', 'success')
+                }]);
+            }, 2000);
         }
 
         function viewCourseDetails(courseId) {
             showToast(`Viewing details for: ${courseId}`, 'info');
+            showCustomModal('Course Details', `
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <h4 class="font-semibold mb-2">Grade Breakdown</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Assignments (40%):</span>
+                                <span class="font-semibold">88%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Quizzes (20%):</span>
+                                <span class="font-semibold">92%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Midterm (20%):</span>
+                                <span class="font-semibold">85%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Final (20%):</span>
+                                <span class="font-semibold">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">Attendance</h4>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Classes Attended:</span>
+                                <span class="font-semibold">28/30</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Attendance Rate:</span>
+                                <span class="font-semibold">93%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Labs Completed:</span>
+                                <span class="font-semibold">12/15</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `, [{
+                text: 'Close',
+                action: () => {}
+            }]);
         }
 
         // Materials-related functions
         function downloadMaterial(materialId) {
             showToast(`Downloading material: ${materialId}`, 'info');
+            showDownloadProgress(() => {
+                showToast('Material downloaded successfully!', 'success');
+            });
         }
 
         function previewMaterial(materialId) {
             showToast(`Previewing material: ${materialId}`, 'info');
+            showCustomModal('Material Preview', `
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-file-pdf text-2xl text-red-600"></i>
+                    </div>
+                    <h4 class="font-semibold mb-4">Python Fundamentals Guide</h4>
+                    <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-8 mb-4">
+                        <p class="text-gray-600 dark:text-gray-400">PDF Preview would be displayed here...</p>
+                    </div>
+                </div>
+            `, [{
+                text: 'Download Full Material',
+                action: () => downloadMaterial(materialId)
+            }]);
         }
 
         function continueWatching(materialId) {
             showToast(`Continuing video: ${materialId}`, 'info');
+            showCustomModal('Video Player', `
+                <div class="bg-black rounded-lg h-64 flex items-center justify-center">
+                    <div class="text-center text-white">
+                        <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-play text-3xl"></i>
+                        </div>
+                        <h4 class="text-xl mb-2">Network Security Lecture</h4>
+                        <p class="text-gray-300 mb-4">Resuming from 45:32</p>
+                        <button class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg" onclick="showToast('Video playback started!', 'success')">Continue Watching</button>
+                    </div>
+                </div>
+            `, [{
+                text: 'Close',
+                action: () => {}
+            }]);
         }
 
         function bookmarkMaterial(materialId) {
-            showToast(`Material bookmarked: ${materialId}`, 'success');
+            let bookmarks = JSON.parse(localStorage.getItem('bookmarkedMaterials') || '[]');
+            if (!bookmarks.includes(materialId)) {
+                bookmarks.push(materialId);
+                localStorage.setItem('bookmarkedMaterials', JSON.stringify(bookmarks));
+                showToast(`Material bookmarked: ${materialId}`, 'success');
+            } else {
+                showToast('Material already bookmarked', 'info');
+            }
         }
 
         function openMaterial(materialId) {
             showToast(`Opening material: ${materialId}`, 'info');
+            setTimeout(() => {
+                showToast('Material opened in new tab!', 'success');
+            }, 1000);
         }
 
         // Exam system integration functions
         function openExamSystem() {
-            showToast('Opening Full Exam System...', 'info');
+            showToast('Opening Exam System...', 'info');
+
+            // Set authentication for exam system
+            localStorage.setItem('examSystemAuth', 'true');
+            localStorage.setItem('examSystemUser', JSON.stringify({
+                id: 'student123',
+                name: 'Student User',
+                role: 'student',
+                track: 'computing'
+            }));
+
             setTimeout(() => {
                 window.location.href = 'exam_system.html';
             }, 1000);
@@ -2522,85 +2873,97 @@
                 'Start Exam',
                 'Are you ready to start this examination? Make sure you have a stable internet connection and your environment is ready for proctoring.',
                 () => {
-                    // Redirect to exam system with specific exam
+                    // Set exam data and redirect
                     localStorage.setItem('startExamId', examId);
-                    openExamSystem();
+                    localStorage.setItem('examSystemAuth', 'true');
+                    localStorage.setItem('examSystemUser', JSON.stringify({
+                        id: 'student123',
+                        name: 'Student User',
+                        role: 'student',
+                        track: 'computing'
+                    }));
+
+                    showToast('Redirecting to exam system...', 'info');
+                    setTimeout(() => {
+                        window.location.href = 'exam_system.html';
+                    }, 1500);
                 }
             );
         }
 
         function showExamPreview(examId) {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-2xl w-full mx-4 max-h-96 overflow-hidden">
-                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-lg font-semibold">Exam Preview</h3>
-                            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
+            showCustomModal('Exam Preview', `
+                <h4 class="font-semibold mb-4">Advanced Python Programming Assessment</h4>
+                <div class="space-y-3 text-sm">
+                    <div class="flex justify-between">
+                        <span>Duration:</span>
+                        <span>120 minutes</span>
                     </div>
-                    <div class="p-6">
-                        <h4 class="font-semibold mb-4">Advanced Python Programming Assessment</h4>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between">
-                                <span>Duration:</span>
-                                <span>120 minutes</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Total Questions:</span>
-                                <span>25</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Total Marks:</span>
-                                <span>150</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Passing Score:</span>
-                                <span>60%</span>
-                            </div>
-                        </div>
-                        <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                            <h5 class="font-medium mb-2">Topics Covered:</h5>
-                            <ul class="text-sm list-disc list-inside space-y-1">
-                                <li>Advanced data structures</li>
-                                <li>Object-oriented programming</li>
-                                <li>Algorithm complexity</li>
-                                <li>Error handling and debugging</li>
-                                <li>File operations and databases</li>
-                            </ul>
-                        </div>
+                    <div class="flex justify-between">
+                        <span>Total Questions:</span>
+                        <span>25</span>
                     </div>
-                    <div class="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">
-                        <button class="btn-secondary" onclick="this.closest('.fixed').remove()">Close</button>
-                        <button class="btn-primary" onclick="this.closest('.fixed').remove(); startExam('${examId}')">Start Exam</button>
+                    <div class="flex justify-between">
+                        <span>Total Marks:</span>
+                        <span>150</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Passing Score:</span>
+                        <span>60%</span>
                     </div>
                 </div>
-            `;
-            document.body.appendChild(modal);
+                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                    <h5 class="font-medium mb-2">Topics Covered:</h5>
+                    <ul class="text-sm list-disc list-inside space-y-1">
+                        <li>Advanced data structures</li>
+                        <li>Object-oriented programming</li>
+                        <li>Algorithm complexity</li>
+                        <li>Error handling and debugging</li>
+                        <li>File operations and databases</li>
+                    </ul>
+                </div>
+            `, [{
+                text: 'Close',
+                action: () => {}
+            }, {
+                text: 'Start Exam',
+                action: () => startExam(examId)
+            }]);
         }
 
         function refreshExams() {
             showToast('Refreshing available exams...', 'info');
-            // Simulate refresh
-            setTimeout(() => {
-                showToast('Exams refreshed successfully!', 'success');
-            }, 1500);
+            const examList = document.getElementById('availableExams');
+            if (examList) {
+                examList.style.opacity = '0.5';
+                setTimeout(() => {
+                    examList.style.opacity = '1';
+                    showToast('Exams refreshed successfully!', 'success');
+                }, 1500);
+            }
         }
 
         function exportResults() {
             showToast('Exporting exam results...', 'info');
-            // Simulate export
             setTimeout(() => {
                 showToast('Results exported successfully!', 'success');
+                showCustomModal('Export Complete', `
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-download text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Export Complete</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Your exam results have been exported as a PDF file.</p>
+                    </div>
+                `, [{
+                    text: 'Close',
+                    action: () => {}
+                }]);
             }, 1500);
         }
 
         function generateReport() {
             showToast('Generating exam report...', 'info');
-            // Simulate report generation
             setTimeout(() => {
                 showToast('Report generated successfully!', 'success');
             }, 1500);
@@ -2609,60 +2972,131 @@
         // Practice tests functions
         function startPractice(testId) {
             showToast(`Starting practice test: ${testId}`, 'info');
+            showCustomModal('Practice Test', `
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-play text-2xl text-purple-600"></i>
+                    </div>
+                    <h4 class="font-semibold mb-2">Ready to Start Practice?</h4>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">This practice test will help you prepare for the actual exam.</p>
+                </div>
+            `, [{
+                text: 'Cancel',
+                action: () => {}
+            }, {
+                text: 'Start Now',
+                action: () => showToast('Practice test started!', 'success')
+            }]);
         }
 
         function createCustomPractice() {
             showToast('Creating custom practice test...', 'info');
+            showCustomModal('Create Custom Practice', `
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Subject</label>
+                        <select class="input-field w-full">
+                            <option>Select subject...</option>
+                            <option>Python Programming</option>
+                            <option>Network Security</option>
+                            <option>Cloud Computing</option>
+                            <option>Database Management</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Number of Questions</label>
+                        <select class="input-field w-full">
+                            <option>10 Questions</option>
+                            <option>15 Questions</option>
+                            <option>20 Questions</option>
+                            <option>25 Questions</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Difficulty Level</label>
+                        <select class="input-field w-full">
+                            <option>Beginner</option>
+                            <option>Intermediate</option>
+                            <option>Advanced</option>
+                            <option>Mixed</option>
+                        </select>
+                    </div>
+                </div>
+            `, [{
+                text: 'Cancel',
+                action: () => {}
+            }, {
+                text: 'Create Practice',
+                action: () => showToast('Custom practice test created!', 'success')
+            }]);
+        }
+
+        // Utility functions
+        function showDownloadProgress(onComplete) {
+            const progressModal = showCustomModal('Downloading Material', `
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold mb-4">Downloading Material</h3>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" id="downloadProgress" style="width: 0%"></div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400" id="downloadStatus">Preparing download...</p>
+                </div>
+            `, [], false);
+
+            let progress = 0;
+            const progressBar = document.getElementById('downloadProgress');
+            const statusText = document.getElementById('downloadStatus');
+
+            const downloadInterval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(downloadInterval);
+                    if (statusText) statusText.textContent = 'Download complete!';
+                    setTimeout(() => {
+                        progressModal.remove();
+                        onComplete();
+                    }, 1000);
+                } else {
+                    if (statusText) statusText.textContent = `Downloading... ${Math.round(progress)}%`;
+                }
+                if (progressBar) progressBar.style.width = progress + '%';
+            }, 500);
         }
 
         // Notification modal
         function showNotificationModal() {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
-            modal.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full mx-4 max-h-96 overflow-hidden">
-                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-lg font-semibold">Notifications</h3>
-                            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
-                                <i class="fas fa-times"></i>
-                            </button>
+            showCustomModal('Notifications', `
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                        <i class="fas fa-clipboard-list text-blue-600 mt-1"></i>
+                        <div>
+                            <p class="font-medium">New Exam Available</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Advanced Python Programming Assessment</p>
+                            <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
                         </div>
                     </div>
-                    <div class="p-6 overflow-y-auto">
-                        <div class="space-y-4">
-                            <div class="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                                <i class="fas fa-clipboard-list text-blue-600 mt-1"></i>
-                                <div>
-                                    <p class="font-medium">New Exam Available</p>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Advanced Python Programming Assessment</p>
-                                    <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-3 bg-orange-50 dark:bg-orange-900 rounded-lg">
-                                <i class="fas fa-clock text-orange-600 mt-1"></i>
-                                <div>
-                                    <p class="font-medium">Exam Reminder</p>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Network Security Protocols exam in 2 days</p>
-                                    <p class="text-xs text-gray-500 mt-1">5 hours ago</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900 rounded-lg">
-                                <i class="fas fa-check-circle text-green-600 mt-1"></i>
-                                <div>
-                                    <p class="font-medium">Result Published</p>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Database Management exam result: B+ (88%)</p>
-                                    <p class="text-xs text-gray-500 mt-1">1 day ago</p>
-                                </div>
-                            </div>
+                    <div class="flex items-start space-x-3 p-3 bg-orange-50 dark:bg-orange-900 rounded-lg">
+                        <i class="fas fa-clock text-orange-600 mt-1"></i>
+                        <div>
+                            <p class="font-medium">Exam Reminder</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Network Security Protocols exam in 2 days</p>
+                            <p class="text-xs text-gray-500 mt-1">5 hours ago</p>
                         </div>
                     </div>
-                    <div class="p-6 border-t border-gray-200 dark:border-gray-700">
-                        <button class="w-full btn-primary text-sm">View All Notifications</button>
+                    <div class="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900 rounded-lg">
+                        <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                        <div>
+                            <p class="font-medium">Result Published</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">Database Management exam result: B+ (88%)</p>
+                            <p class="text-xs text-gray-500 mt-1">1 day ago</p>
+                        </div>
                     </div>
                 </div>
-            `;
-            document.body.appendChild(modal);
+            `, [{
+                text: 'View All Notifications',
+                action: () => {}
+            }]);
         }
 
         // Toast notifications
@@ -2696,50 +3130,75 @@
             }, 6000);
         }
 
-        // Custom confirm dialog
-        function showCustomConfirm(title, message, onConfirm) {
+        // Custom modal function
+        function showCustomModal(title, content, buttons = [], closable = true) {
             const modal = document.createElement('div');
             modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+
+            const buttonsHtml = buttons.map(btn =>
+                `<button class="btn-primary px-4 py-2" onclick="this.closest('.fixed').remove(); (${btn.action})()">${btn.text}</button>`
+            ).join(' ');
+
             modal.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-question-circle text-2xl text-yellow-600"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold mb-2">${title}</h3>
-                        <p class="text-gray-700 dark:text-gray-300 mb-6">${message}</p>
-                        <div class="flex justify-center space-x-3">
-                            <button class="px-6 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onclick="this.closest('.fixed').remove()">Cancel</button>
-                            <button class="px-6 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded-lg transition-colors" onclick="this.closest('.fixed').remove(); (${onConfirm})()">Confirm</button>
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-2xl w-full mx-4 max-h-96 overflow-hidden">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold">${title}</h3>
+                            ${closable ? '<button onclick="this.closest(\'.fixed\').remove()" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times"></i></button>' : ''}
                         </div>
                     </div>
+                    <div class="p-6 overflow-y-auto">
+                        ${content}
+                    </div>
+                    ${buttons.length > 0 ? `<div class="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">${buttonsHtml}</div>` : ''}
                 </div>
             `;
             document.body.appendChild(modal);
+            return modal;
         }
 
-        // Logout functionality
-        document.getElementById('logoutBtn') ? .addEventListener('click', () => {
-            showCustomConfirm(
-                'Logout Confirmation',
-                'Are you sure you want to logout?',
-                () => {
-                    localStorage.removeItem('isAuthenticated');
-                    localStorage.removeItem('currentUser');
-                    localStorage.removeItem('sidebarCollapsed');
-                    localStorage.removeItem('examSystemAuth');
-                    localStorage.removeItem('examSystemUser');
-                    showToast('Logged out successfully!', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 1000);
-                }
-            );
-        });
+        // Custom confirm dialog
+        function showCustomConfirm(title, message, onConfirm) {
+            showCustomModal(title, `
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-question-circle text-2xl text-yellow-600"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6">${message}</p>
+                </div>
+            `, [
+                { text: 'Cancel', action: () => {} },
+                { text: 'Confirm', action: onConfirm }
+            ]);
+        }
+
+        // Logout functionality - Fixed to work properly
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                showCustomConfirm(
+                    'Logout Confirmation',
+                    'Are you sure you want to logout?',
+                    function() {
+                        localStorage.removeItem('isAuthenticated');
+                        localStorage.removeItem('currentUser');
+                        localStorage.removeItem('sidebarCollapsed');
+                        localStorage.removeItem('examSystemAuth');
+                        localStorage.removeItem('examSystemUser');
+                        showToast('Logged out successfully!', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 1000);
+                    }
+                );
+            });
+        }
 
         // Smooth scrolling for internal links
         document.addEventListener('click', function(e) {
-            if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
+            if (e.target.tagName === 'A' && e.target.getAttribute('href') && e.target.getAttribute('href').startsWith('#')) {
                 e.preventDefault();
                 const target = document.querySelector(e.target.getAttribute('href'));
                 if (target) {
@@ -2755,13 +3214,15 @@
             // Ctrl/Cmd + B to toggle sidebar
             if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
                 e.preventDefault();
-                document.getElementById('toggleSidebar') ? .click();
+                const toggleBtn = document.getElementById('toggleSidebar');
+                if (toggleBtn) toggleBtn.click();
             }
 
             // Ctrl/Cmd + D to toggle dark mode
             if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
                 e.preventDefault();
-                document.getElementById('darkModeToggle') ? .click();
+                const darkModeBtn = document.getElementById('darkModeToggle');
+                if (darkModeBtn) darkModeBtn.click();
             }
         });
 
