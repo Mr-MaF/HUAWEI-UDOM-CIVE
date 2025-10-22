@@ -469,6 +469,59 @@
             font-family: 'Courier New', monospace;
             font-size: 0.875rem;
         }
+        /* Exam System Integration Styles */
+        
+        .exam-system-badge {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+        
+        .exam-system-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .exam-system-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8b5cf6, #a855f7, #ec4899);
+        }
+        
+        .admin-privilege-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            animation: pulse 2s infinite;
+        }
+        
+        .clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .clickable:hover {
+            transform: translateY(-2px);
+        }
+        
+        .clickable:active {
+            transform: translateY(0) scale(0.98);
+        }
     </style>
 </head>
 
@@ -585,6 +638,13 @@
                 <ul class="space-y-2">
                     <li>
                         <div class="nav-item flex items-center clickable" data-section="exam-system">
+                            <i class="fas fa-rocket w-6 h-6 mr-3 flex-shrink-0 text-lg"></i>
+                            <span class="nav-text font-medium">Advanced Exam System</span>
+                            <span class="nav-badge ml-auto bg-gradient-to-r from-purple-500 to-pink-600 text-white text-xs px-3 py-1 rounded-full nav-text animate-pulse">Admin</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-item flex items-center clickable" data-section="exam-console">
                             <i class="fas fa-clipboard-check w-6 h-6 mr-3 flex-shrink-0 text-lg"></i>
                             <span class="nav-text font-medium">Exam Console</span>
                             <span class="nav-badge ml-auto bg-purple-500 text-white text-xs px-2 py-1 rounded-full nav-text animate-pulse">Live</span>
@@ -827,20 +887,20 @@
                 <!-- Enhanced Quick Access Panel -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <!-- Advanced Exam System Access -->
-                    <div class="card p-8 border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-purple-900 dark:via-blue-900 dark:to-indigo-900">
+                    <div class="card exam-system-card p-8 border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 dark:from-purple-900 dark:via-blue-900 dark:to-indigo-900">
                         <div class="flex items-center justify-between mb-6">
                             <div class="w-20 h-20 bg-gradient-to-br from-purple-500 via-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-xl">
-                                <i class="fas fa-clipboard-check text-3xl text-white"></i>
+                                <i class="fas fa-rocket text-3xl text-white"></i>
                             </div>
-                            <div class="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-bold animate-pulse">
-                                LIVE SYSTEM
+                            <div class="admin-privilege-badge">
+                                ADMIN ACCESS
                             </div>
                         </div>
                         <h3 class="text-2xl font-bold mb-3 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                             Advanced Exam System
                         </h3>
                         <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                            AI-powered examination platform with blockchain verification, real-time proctoring, and comprehensive analytics dashboard.
+                            Full administrative control over the AI-powered examination platform with blockchain verification, real-time monitoring, and comprehensive system management.
                         </p>
                         <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
                             <div class="text-center bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
@@ -853,7 +913,7 @@
                             </div>
                         </div>
                         <button class="w-full btn-primary text-lg py-4" id="accessExamSystemBtn">
-                            <i class="fas fa-rocket mr-3"></i>Access Exam Console
+                            <i class="fas fa-rocket mr-3"></i>Launch Admin Console
                         </button>
                     </div>
 
@@ -945,6 +1005,71 @@
                     </div>
                 </div>
 
+                <!-- Advanced Exam System Section -->
+                <div id="exam-system-section" class="section hidden fade-in">
+                    <div class="card p-8 text-center hover-lift">
+                        <div class="mb-8">
+                            <div class="w-32 h-32 bg-gradient-to-br from-purple-500 via-blue-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
+                                <i class="fas fa-rocket text-5xl text-white"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                                Advanced Exam System - Administrator Console
+                            </h2>
+                            <p class="text-gray-600 dark:text-gray-400 mb-6 text-lg max-w-2xl mx-auto">
+                                Access the complete system administration panel with full control over AI proctoring, blockchain verification, user management, and comprehensive monitoring of all examination activities.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900 dark:to-pink-900 p-6 rounded-xl border border-red-200 dark:border-red-800">
+                                <i class="fas fa-shield-alt text-3xl text-red-600 mb-4"></i>
+                                <h3 class="font-semibold text-lg mb-2">System Control</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Full administrative access to all system components</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900 dark:to-pink-900 p-6 rounded-xl border border-purple-200 dark:border-purple-800">
+                                <i class="fas fa-eye text-3xl text-purple-600 mb-4"></i>
+                                <h3 class="font-semibold text-lg mb-2">Live Monitoring</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Real-time oversight of all examination sessions</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900 p-6 rounded-xl border border-blue-200 dark:border-blue-800">
+                                <i class="fas fa-chart-pie text-3xl text-blue-600 mb-4"></i>
+                                <h3 class="font-semibold text-lg mb-2">Analytics & Reports</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Comprehensive system analytics and reporting</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-50 dark:bg-red-900 p-6 rounded-xl border border-red-200 dark:border-red-800 mb-8">
+                            <h4 class="font-semibold mb-3 text-red-800 dark:text-red-200">Administrator Privileges Active</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-crown text-red-600 mr-2"></i>
+                                    <span>Super Admin Access</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-database text-purple-600 mr-2"></i>
+                                    <span>Database Control</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-users-cog text-blue-600 mr-2"></i>
+                                    <span>User Management</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-server text-orange-600 mr-2"></i>
+                                    <span>System Configuration</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-danger text-xl px-12 py-4 clickable" onclick="openAdvancedExamSystem()">
+                        <i class="fas fa-rocket mr-3"></i>Launch Administrator Console
+                    </button>
+
+                        <p class="text-sm text-gray-500 mt-4">
+                            <i class="fas fa-shield-alt mr-1"></i> You will have full administrative control over the examination platform
+                        </p>
+                    </div>
+                </div>
+
                 <!-- User Management Section (placeholder) -->
                 <div id="users-section" class="section hidden">
                     <div class="card p-8">
@@ -969,7 +1094,84 @@
                     </div>
                 </div>
 
-                <!-- Additional sections would be added here -->
+                <!-- Additional placeholder sections for all navigation items -->
+                <div id="roles-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">Roles & Permissions</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Role management interface will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="courses-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">Course Management</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Course management interface will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="departments-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">Departments</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Department management interface will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="exam-console-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">Exam Console</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Traditional exam console will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="proctoring-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">AI Proctoring</h2>
+                        <p class="text-gray-600 dark:text-gray-400">AI proctoring controls will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="exam-reports-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">Exam Analytics</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Exam analytics and reports will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="security-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">Security Center</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Security management interface will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="audit-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">Audit Trails</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Audit trail interface will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="system-health-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">System Health</h2>
+                        <p class="text-gray-600 dark:text-gray-400">System health monitoring will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="backup-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">Backup & Recovery</h2>
+                        <p class="text-gray-600 dark:text-gray-400">Backup and recovery interface will be loaded here</p>
+                    </div>
+                </div>
+
+                <div id="settings-section" class="section hidden">
+                    <div class="card p-8 text-center">
+                        <h2 class="text-3xl font-bold mb-4">System Settings</h2>
+                        <p class="text-gray-600 dark:text-gray-400">System configuration interface will be loaded here</p>
+                    </div>
+                </div>
+
         </main>
         </div>
 
@@ -992,6 +1194,12 @@
                             securityScore: 98.5
                         }
                     };
+                    this.examSystemIntegration = {
+                        isAvailable: true,
+                        lastSync: null,
+                        activeExams: [],
+                        systemStatus: 'operational'
+                    };
                 }
 
                 async initialize() {
@@ -1004,6 +1212,7 @@
                     this.initializeSessionManagement();
                     this.initializeEventListeners();
                     this.loadSystemData();
+                    this.initializeExamSystemIntegration();
                     this.startRealTimeMonitoring();
 
                     this.showSecureToast('Administrator dashboard initialized successfully', 'success');
@@ -1011,20 +1220,25 @@
 
                 async validateAuthentication() {
                     try {
-                        // For demo purposes, create a default admin session
-                        const defaultAdmin = {
-                            id: 'admin001',
-                            name: 'System Administrator',
-                            email: 'admin@udom.ac.tz',
-                            role: 'administrator'
-                        };
+                        // Enhanced authentication for administrator
+                        const isAuthenticated = localStorage.getItem('isAuthenticated');
+                        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
 
-                        localStorage.setItem('isAuthenticated', 'true');
-                        localStorage.setItem('currentUser', JSON.stringify(defaultAdmin));
-                        localStorage.setItem('sessionToken', 'admin_' + Date.now());
-                        localStorage.setItem('loginTimestamp', Date.now().toString());
+                        console.log('🔐 Administrator Authentication Debug:', {
+                            isAuthenticated: isAuthenticated,
+                            currentUser: currentUser,
+                            userRole: currentUser.role
+                        });
 
-                        this.currentUser = defaultAdmin;
+                        if (!isAuthenticated || currentUser.role !== 'administrator') {
+                            console.log('❌ Redirecting to login - Reason:', !isAuthenticated ? 'Not authenticated' : `Wrong role: ${currentUser.role} (expected: administrator)`);
+                            this.handleAuthenticationFailure('Administrator access required');
+                            return {
+                                success: false
+                            };
+                        }
+
+                        this.currentUser = currentUser;
                         this.updateUserInterface();
                         this.updateSecurityIndicator('secure');
 
@@ -1054,6 +1268,100 @@
                     );
                 }
 
+                // Initialize Exam System Integration
+                initializeExamSystemIntegration() {
+                    console.log('🎯 Initializing Advanced Exam System Integration...');
+
+                    // Set up administrator authentication for exam system
+                    if (this.currentUser) {
+                        localStorage.setItem('examSystemAuth', 'true');
+                        localStorage.setItem('examSystemUser', JSON.stringify({
+                            id: this.currentUser.id || 'admin001',
+                            name: this.currentUser.name || 'System Administrator',
+                            role: 'administrator',
+                            department: 'System Administration',
+                            privileges: ['full_system_access', 'user_management', 'exam_control', 'security_admin', 'database_admin'],
+                            accessLevel: 'superuser',
+                            securityClearance: 'maximum'
+                        }));
+                    }
+
+                    this.examSystemIntegration.lastSync = new Date().toISOString();
+                    this.examSystemIntegration.activeExams = [{
+                        id: 'exam1',
+                        title: 'Advanced Python Programming Assessment',
+                        studentsOnline: 42,
+                        status: 'active',
+                        securityLevel: 'high'
+                    }, {
+                        id: 'exam2',
+                        title: 'Network Security Protocols',
+                        studentsOnline: 35,
+                        status: 'monitoring',
+                        securityLevel: 'maximum'
+                    }];
+
+                    console.log('✅ Advanced Exam System Integration initialized successfully');
+                }
+
+                // Enhanced Exam System Access Functions
+                openAdvancedExamSystem() {
+                    console.log('🚀 Launching Advanced Exam System with Administrator Privileges...');
+                    this.showSecureToast('Preparing administrator console...', 'info');
+
+                    // Ensure administrator authentication is set with full privileges
+                    localStorage.setItem('examSystemAuth', 'true');
+                    localStorage.setItem('examSystemUser', JSON.stringify({
+                        id: this.currentUser ? .id || 'admin001',
+                        name: this.currentUser ? .name || 'System Administrator',
+                        role: 'administrator',
+                        department: 'System Administration',
+                        privileges: ['full_system_access', 'user_management', 'exam_control', 'security_admin', 'database_admin', 'ai_proctoring_control'],
+                        accessLevel: 'superuser',
+                        securityClearance: 'maximum'
+                    }));
+
+                    // Simulate system preparation
+                    setTimeout(() => {
+                        this.showSecurityModal('Administrator Console Access', `
+                        <div class="text-center">
+                            <div class="w-20 h-20 bg-gradient-to-br from-red-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-crown text-3xl text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Full Administrator Access Granted</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4">You will be redirected to the Advanced Exam System with complete administrative control and monitoring capabilities.</p>
+                            <div class="bg-red-50 dark:bg-red-900 p-3 rounded-lg mb-4">
+                                <p class="text-sm text-red-800 dark:text-red-200">
+                                    <i class="fas fa-shield-alt mr-1"></i>
+                                    Administrator Features: System Control, Live Monitoring, User Management, Security Center
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-red-600">${this.examSystemIntegration.activeExams.length}</div>
+                                    <div class="text-gray-500">Active Sessions</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-purple-600">100%</div>
+                                    <div class="text-gray-500">System Control</div>
+                                </div>
+                            </div>
+                        </div>
+                    `, [{
+                            text: 'Cancel',
+                            action: () => {}
+                        }, {
+                            text: 'Launch Administrator Console',
+                            action: () => {
+                                this.showSecureToast('Redirecting to Advanced Exam System...', 'success');
+                                setTimeout(() => {
+                                    window.location.href = 'exam_system.html';
+                                }, 1000);
+                            }
+                        }]);
+                    }, 1500);
+                }
+
                 updateUserInterface() {
                     if (!this.currentUser) return;
 
@@ -1061,12 +1369,25 @@
                     const userRole = document.getElementById('userRole');
                     const userInitials = document.getElementById('userInitials');
 
-                    if (userName) userName.textContent = this.currentUser.name || 'Administrator';
+                    if (userName) {
+                        userName.style.opacity = '0';
+                        userName.textContent = this.currentUser.name || 'System Administrator';
+                        setTimeout(() => {
+                            userName.style.transition = 'opacity 0.5s ease';
+                            userName.style.opacity = '1';
+                        }, 100);
+                    }
+
                     if (userRole) userRole.textContent = this.currentUser.role || 'Administrator';
 
                     if (userInitials && this.currentUser.name) {
                         const initials = this.currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
                         userInitials.textContent = initials;
+                        userInitials.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            userInitials.style.transition = 'transform 0.3s ease';
+                            userInitials.style.transform = 'scale(1)';
+                        }, 200);
                     }
                 }
 
@@ -1099,7 +1420,7 @@
                     setInterval(updateTimer, 1000);
                 }
 
-                // FIXED: Enhanced Event Listeners with proper binding
+                // Enhanced Event Listeners with proper binding
                 initializeEventListeners() {
                     console.log('🔗 Initializing event listeners...');
 
@@ -1119,6 +1440,37 @@
 
                     // Security controls
                     this.bindSecurityControls();
+
+                    // Keyboard shortcuts
+                    this.initializeKeyboardShortcuts();
+                }
+
+                initializeKeyboardShortcuts() {
+                    document.addEventListener('keydown', (e) => {
+                        // Ctrl/Cmd + Shift + E to open exam system
+                        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'E') {
+                            e.preventDefault();
+                            this.openAdvancedExamSystem();
+                        }
+
+                        // Ctrl/Cmd + B to toggle sidebar
+                        if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                            e.preventDefault();
+                            this.toggleDesktopSidebar();
+                        }
+
+                        // Ctrl/Cmd + D to toggle dark mode
+                        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                            e.preventDefault();
+                            this.toggleDarkMode();
+                        }
+
+                        // Escape to close modals
+                        if (e.key === 'Escape') {
+                            const modals = document.querySelectorAll('.fixed.inset-0');
+                            modals.forEach(modal => modal.remove());
+                        }
+                    });
                 }
 
                 handleGlobalClick(e) {
@@ -1146,7 +1498,7 @@
 
                     // Handle buttons with specific IDs
                     if (target.closest('#accessExamSystemBtn')) {
-                        this.accessExamSystem();
+                        this.openAdvancedExamSystem();
                         return;
                     }
                 }
@@ -1207,7 +1559,7 @@
                     if (examSystemBtn) {
                         examSystemBtn.addEventListener('click', (e) => {
                             e.preventDefault();
-                            this.accessExamSystem();
+                            this.openAdvancedExamSystem();
                         });
                     }
 
@@ -1276,7 +1628,8 @@
                         'courses': 'Course Management',
                         'roles': 'Roles & Permissions',
                         'departments': 'Departments',
-                        'exam-system': 'Exam System Console',
+                        'exam-system': 'Advanced Exam System',
+                        'exam-console': 'Exam Console',
                         'proctoring': 'AI Proctoring',
                         'exam-reports': 'Exam Analytics',
                         'security': 'Security Center',
@@ -1293,27 +1646,6 @@
                         item.classList.remove('active');
                     });
                     activeItem.classList.add('active');
-                }
-
-                accessExamSystem() {
-                    console.log('🎯 Accessing Advanced Exam System...');
-                    this.showSecureToast('Initializing secure exam system access...', 'info');
-
-                    // Set admin privileges for exam system
-                    localStorage.setItem('examSystemAccess', 'administrator');
-                    localStorage.setItem('examSystemUser', JSON.stringify({
-                        id: this.currentUser.id,
-                        name: this.currentUser.name,
-                        role: 'administrator',
-                        privileges: ['full_access', 'proctoring_control', 'system_admin'],
-                        accessLevel: 'superuser'
-                    }));
-
-                    // Simulate system preparation
-                    setTimeout(() => {
-                        this.showSecureToast('Exam system access granted', 'success');
-                        window.location.href = 'exam_system.html';
-                    }, 1500);
                 }
 
                 handleQuickAction(action) {
@@ -1333,7 +1665,6 @@
                     }
                 }
 
-                // Rest of your methods remain the same...
                 loadSystemData() {
                     this.systemData = {
                         users: [{
@@ -1440,388 +1771,379 @@
 
                 generateNotificationHTML(notifications) {
                         return `
-                <div class="space-y-4 max-h-96 overflow-y-auto">
-                    ${notifications.map(notification => `
-                        <div class="p-4 bg-gradient-to-r from-${this.getNotificationColor(notification.priority)}-50 to-${this.getNotificationColor(notification.priority)}-100 dark:from-${this.getNotificationColor(notification.priority)}-900 dark:to-${this.getNotificationColor(notification.priority)}-800 rounded-xl border border-${this.getNotificationColor(notification.priority)}-200 dark:border-${this.getNotificationColor(notification.priority)}-700">
-                            <div class="flex items-start justify-between">
-                                <div>
-                                    <h4 class="font-semibold text-${this.getNotificationColor(notification.priority)}-800 dark:text-${this.getNotificationColor(notification.priority)}-200">${notification.title}</h4>
-                                    <p class="text-sm text-${this.getNotificationColor(notification.priority)}-600 dark:text-${this.getNotificationColor(notification.priority)}-300 mt-1">${notification.message}</p>
-                                    <p class="text-xs text-${this.getNotificationColor(notification.priority)}-500 mt-2">${notification.time}</p>
+                    <div class="space-y-4 max-h-96 overflow-y-auto">
+                        ${notifications.map(notification => `
+                            <div class="p-4 bg-gradient-to-r from-${this.getNotificationColor(notification.priority)}-50 to-${this.getNotificationColor(notification.priority)}-100 dark:from-${this.getNotificationColor(notification.priority)}-900 dark:to-${this.getNotificationColor(notification.priority)}-800 rounded-xl border border-${this.getNotificationColor(notification.priority)}-200 dark:border-${this.getNotificationColor(notification.priority)}-700">
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <h4 class="font-semibold text-${this.getNotificationColor(notification.priority)}-800 dark:text-${this.getNotificationColor(notification.priority)}-200">${notification.title}</h4>
+                                        <p class="text-sm text-${this.getNotificationColor(notification.priority)}-600 dark:text-${this.getNotificationColor(notification.priority)}-300 mt-1">${notification.message}</p>
+                                        <p class="text-xs text-${this.getNotificationColor(notification.priority)}-500 mt-2">${notification.time}</p>
+                                    </div>
+                                    <i class="fas fa-${this.getNotificationIcon(notification.type)} text-${this.getNotificationColor(notification.priority)}-500"></i>
                                 </div>
-                                <i class="fas fa-${this.getNotificationIcon(notification.type)} text-${this.getNotificationColor(notification.priority)}-500"></i>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            getNotificationColor(priority) {
+                const colors = { success: 'green', warning: 'yellow', error: 'red', info: 'blue' };
+                return colors[priority] || 'blue';
+            }
+
+            getNotificationIcon(type) {
+                const icons = { security: 'shield-alt', system: 'cog', exam: 'clipboard-check', user: 'user' };
+                return icons[type] || 'bell';
+            }
+
+            // Single initiateSecureLogout method
+            initiateSecureLogout() {
+                this.showSecurityModal(
+                    'Confirm Secure Logout',
+                    'Are you sure you want to end your administrator session? All unsaved changes will be lost.',
+                    () => {
+                        this.performSecureLogout();
+                    },
+                    'Logout'
+                );
+            }
+
+            // Single performSecureLogout method
+            performSecureLogout() {
+                console.log('🔒 Performing secure logout...');
+                
+                // Clear all session data
+                localStorage.removeItem('isAuthenticated');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('sessionToken');
+                localStorage.removeItem('loginTimestamp');
+                localStorage.removeItem('examSystemAuth');
+                localStorage.removeItem('examSystemUser');
+
+                // Update security indicator
+                this.updateSecurityIndicator('error', 'Logged Out');
+                
+                // Show logout message and redirect
+                this.showSecureToast('Secure logout completed', 'success');
+                
+                // Use a short timeout to ensure the toast is visible
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            }
+
+            // Single showSecurityModal method
+            showSecurityModal(title, message, onConfirm, confirmText = 'Confirm') {
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-sm';
+                
+                modal.innerHTML = `
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden">
+                        <div class="p-8 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">${title}</h3>
+                                <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all close-modal">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
                             </div>
                         </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        getNotificationColor(priority) {
-            const colors = { success: 'green', warning: 'yellow', error: 'red', info: 'blue' };
-            return colors[priority] || 'blue';
-        }
-
-        getNotificationIcon(type) {
-            const icons = { security: 'shield-alt', system: 'cog', exam: 'clipboard-check', user: 'user' };
-            return icons[type] || 'bell';
-        }
-
-        // FIXED: Single initiateSecureLogout method
-        initiateSecureLogout() {
-            this.showSecurityModal(
-                'Confirm Secure Logout',
-                'Are you sure you want to end your administrator session? All unsaved changes will be lost.',
-                () => {
-                    this.performSecureLogout();
-                },
-                'Logout'
-            );
-        }
-
-        // FIXED: Single performSecureLogout method
-        performSecureLogout() {
-            console.log('🔒 Performing secure logout...');
-            
-            // Clear all session data
-            localStorage.removeItem('isAuthenticated');
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('sessionToken');
-            localStorage.removeItem('loginTimestamp');
-            localStorage.removeItem('examSystemAccess');
-            localStorage.removeItem('examSystemUser');
-
-            // Update security indicator
-            this.updateSecurityIndicator('error', 'Logged Out');
-            
-            // Show logout message and redirect
-            this.showSecureToast('Secure logout completed', 'success');
-            
-            // Use a short timeout to ensure the toast is visible
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1000);
-        }
-
-        // FIXED: Single showSecurityModal method
-        showSecurityModal(title, message, onConfirm, confirmText = 'Confirm') {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-sm';
-            
-            modal.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden">
-                    <div class="p-8 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">${title}</h3>
-                            <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all close-modal">
-                                <i class="fas fa-times text-xl"></i>
-                            </button>
+                        <div class="p-8 overflow-y-auto">${message}</div>
+                        <div class="p-8 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-end space-x-4">
+                            <button class="btn-secondary px-6 py-3 cancel-btn">Cancel</button>
+                            <button class="btn-danger px-6 py-3 confirm-btn">${confirmText}</button>
                         </div>
                     </div>
-                    <div class="p-8">
-                        <div class="text-center">
-                            <div class="w-20 h-20 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <i class="fas fa-shield-alt text-3xl text-red-600"></i>
-                            </div>
-                            <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">${message}</p>
-                        </div>
-                    </div>
-                    <div class="p-8 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-end space-x-4">
-                        <button class="btn-secondary px-6 py-3 cancel-btn">Cancel</button>
-                        <button class="btn-danger px-6 py-3 confirm-btn">${confirmText}</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
+                `;
+                
+                document.body.appendChild(modal);
 
-            // Add event listeners directly to the buttons
-            const closeBtn = modal.querySelector('.close-modal');
-            const cancelBtn = modal.querySelector('.cancel-btn');
-            const confirmBtn = modal.querySelector('.confirm-btn');
+                // Add event listeners directly to the buttons
+                const closeBtn = modal.querySelector('.close-modal');
+                const cancelBtn = modal.querySelector('.cancel-btn');
+                const confirmBtn = modal.querySelector('.confirm-btn');
 
-            const closeModal = () => {
-                modal.remove();
-            };
+                const closeModal = () => {
+                    modal.remove();
+                };
 
-            closeBtn.addEventListener('click', closeModal);
-            cancelBtn.addEventListener('click', closeModal);
-            
-            confirmBtn.addEventListener('click', () => {
-                closeModal();
-                onConfirm();
-            });
-
-            // Close on backdrop click
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
+                closeBtn.addEventListener('click', closeModal);
+                cancelBtn.addEventListener('click', closeModal);
+                
+                confirmBtn.addEventListener('click', () => {
                     closeModal();
-                }
-            });
+                    onConfirm();
+                });
 
-            // Close on Escape key
-            const handleEscape = (e) => {
-                if (e.key === 'Escape') {
-                    closeModal();
-                    document.removeEventListener('keydown', handleEscape);
-                }
-            };
-            document.addEventListener('keydown', handleEscape);
+                // Close on backdrop click
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
 
-            return modal;
-        }
-
-        toggleMobileSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const isHidden = sidebar.classList.contains('mobile-hidden');
-
-            if (isHidden) {
-                sidebar.classList.remove('mobile-hidden');
-                overlay.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            } else {
-                sidebar.classList.add('mobile-hidden');
-                overlay.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-        }
-
-        toggleDesktopSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('sidebar-collapsed');
-        }
-
-        initializeSidebar() {
-            if (window.innerWidth <= 768) {
-                document.getElementById('sidebar').classList.add('mobile-hidden');
-            }
-        }
-
-        initializeDarkMode() {
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.classList.add('dark');
-                this.updateDarkModeIcon();
+                return modal;
             }
 
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-                if (event.matches) {
-                    document.documentElement.classList.add('dark');
+            toggleMobileSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                const isHidden = sidebar.classList.contains('mobile-hidden');
+
+                if (isHidden) {
+                    sidebar.classList.remove('mobile-hidden');
+                    overlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
                 } else {
-                    document.documentElement.classList.remove('dark');
+                    sidebar.classList.add('mobile-hidden');
+                    overlay.classList.remove('show');
+                    document.body.style.overflow = '';
                 }
+            }
+
+            toggleDesktopSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('sidebar-collapsed');
+            }
+
+            initializeSidebar() {
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.add('mobile-hidden');
+                }
+            }
+
+            initializeDarkMode() {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                    this.updateDarkModeIcon();
+                }
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                    if (event.matches) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    this.updateDarkModeIcon();
+                });
+            }
+
+            toggleDarkMode() {
+                const isDark = document.documentElement.classList.toggle('dark');
                 this.updateDarkModeIcon();
+                this.showSecureToast(`${isDark ? 'Dark' : 'Light'} mode activated`, 'success');
+            }
+
+            updateDarkModeIcon() {
+                const icon = document.getElementById('darkModeIcon');
+                if (icon) {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    icon.className = isDark ? 'fas fa-sun text-lg' : 'fas fa-moon text-lg';
+                }
+            }
+
+            updateSecurityIndicator(status, message = '') {
+                const indicator = document.getElementById('securityIndicator');
+                const statusText = document.getElementById('securityStatus');
+                
+                if (!indicator || !statusText) return;
+
+                indicator.className = 'security-indicator';
+                
+                switch(status) {
+                    case 'secure':
+                        indicator.classList.add('bg-green-500');
+                        statusText.textContent = message || 'Secure Session';
+                        break;
+                    case 'warning':
+                        indicator.classList.add('warning');
+                        statusText.textContent = message || 'Security Warning';
+                        break;
+                    case 'error':
+                        indicator.classList.add('error');
+                        statusText.textContent = message || 'Security Alert';
+                        break;
+                }
+            }
+
+            startRealTimeMonitoring() {
+                setInterval(() => {
+                    this.updateSystemMetrics();
+                }, 30000);
+            }
+
+            updateSystemMetrics() {
+                const healthScore = Math.floor(Math.random() * 5) + 95;
+                const uptime = (99.8 + Math.random() * 0.2).toFixed(1);
+                
+                this.updateElement('healthScore', `${healthScore}%`);
+                this.updateElement('systemUptime', `${uptime}%`);
+            }
+
+            showSecureToast(message, type = 'info') {
+                document.querySelectorAll('.toast').forEach(toast => toast.remove());
+
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-${this.getToastIcon(type)} mr-3"></i>
+                            <span>${message}</span>
+                        </div>
+                        <button class="ml-4 text-white hover:text-gray-200 transition-colors" onclick="this.parentElement.parentElement.remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+
+                document.body.appendChild(toast);
+                requestAnimationFrame(() => toast.classList.add('show'));
+
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.classList.remove('show');
+                        setTimeout(() => toast.remove(), 400);
+                    }
+                }, 5000);
+            }
+
+            getToastIcon(type) {
+                const icons = {
+                    success: 'check-circle',
+                    error: 'exclamation-circle',
+                    warning: 'exclamation-triangle',
+                    info: 'info-circle'
+                };
+                return icons[type] || 'info-circle';
+            }
+
+            showModal(title, content, buttons = []) {
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-sm';
+                
+                const defaultButtons = buttons.length > 0 ? buttons : [
+                    { text: 'Close', action: () => modal.remove(), class: 'btn-secondary' }
+                ];
+
+                modal.innerHTML = `
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+                        <div class="p-8 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">${title}</h3>
+                                <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all" onclick="this.closest('.fixed').remove()">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-8 max-h-96 overflow-y-auto">
+                            ${content}
+                        </div>
+                        <div class="p-8 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-end space-x-4">
+                            ${defaultButtons.map(btn => 
+                                `<button class="${btn.class || 'btn-primary'} px-6 py-3" onclick="(${btn.action.toString()})(); this.closest('.fixed').remove();">${btn.text}</button>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                return modal;
+            }
+
+            showUserManagementModal() {
+                const content = `
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
+                            <input type="text" class="input-field" placeholder="Enter full name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                            <input type="email" class="input-field" placeholder="user@udom.ac.tz" required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Role</label>
+                                <select class="input-field">
+                                    <option>Student</option>
+                                    <option>Lecturer</option>
+                                    <option>Administrator</option>
+                                    <option>Subject Expert</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Department</label>
+                                <select class="input-field">
+                                    <option>Computer Science</option>
+                                    <option>Mathematics</option>
+                                    <option>Engineering</option>
+                                    <option>Agriculture</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.showModal('Add New User', content, [
+                    { text: 'Cancel', action: () => {}, class: 'btn-secondary' },
+                    { text: 'Create User', action: () => this.createUser(), class: 'btn-primary' }
+                ]);
+            }
+
+            createUser() {
+                this.showSecureToast('User account created successfully', 'success');
+            }
+
+            showCourseCreationModal() {
+                this.showSecureToast('Course creation modal will be implemented', 'info');
+            }
+
+            showBroadcastModal() {
+                this.showSecureToast('Broadcast message modal will be implemented', 'info');
+            }
+
+            handleSessionExpiry() {
+                console.warn('⚠️ Session expired');
+                this.updateSecurityIndicator('error', 'Session Expired');
+
+                this.showSecurityModal(
+                    'Session Expired',
+                    'Your administrator session has expired for security reasons. Please log in again to continue.',
+                    () => {
+                        this.performSecureLogout();
+                    }
+                );
+            }
+        }
+
+        // Make functions globally available
+        window.openAdvancedExamSystem = function() {
+            if (window.adminDashboard) {
+                window.adminDashboard.openAdvancedExamSystem();
+            }
+        };
+
+        // Initialize the dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.adminDashboard = new AdminDashboard();
+            window.adminDashboard.initialize().catch(error => {
+                console.error('Failed to initialize dashboard:', error);
             });
-        }
-
-        toggleDarkMode() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            this.updateDarkModeIcon();
-            this.showSecureToast(`${isDark ? 'Dark' : 'Light'} mode activated`, 'success');
-        }
-
-        updateDarkModeIcon() {
-            const icon = document.getElementById('darkModeIcon');
-            if (icon) {
-                const isDark = document.documentElement.classList.contains('dark');
-                icon.className = isDark ? 'fas fa-sun text-lg' : 'fas fa-moon text-lg';
-            }
-        }
-
-        updateSecurityIndicator(status, message = '') {
-            const indicator = document.getElementById('securityIndicator');
-            const statusText = document.getElementById('securityStatus');
-            
-            if (!indicator || !statusText) return;
-
-            indicator.className = 'security-indicator';
-            
-            switch(status) {
-                case 'secure':
-                    indicator.classList.add('bg-green-500');
-                    statusText.textContent = message || 'Secure Session';
-                    break;
-                case 'warning':
-                    indicator.classList.add('warning');
-                    statusText.textContent = message || 'Security Warning';
-                    break;
-                case 'error':
-                    indicator.classList.add('error');
-                    statusText.textContent = message || 'Security Alert';
-                    break;
-            }
-        }
-
-        startRealTimeMonitoring() {
-            setInterval(() => {
-                this.updateSystemMetrics();
-            }, 30000);
-        }
-
-        updateSystemMetrics() {
-            const healthScore = Math.floor(Math.random() * 5) + 95;
-            const uptime = (99.8 + Math.random() * 0.2).toFixed(1);
-            
-            this.updateElement('healthScore', `${healthScore}%`);
-            this.updateElement('systemUptime', `${uptime}%`);
-        }
-
-        showSecureToast(message, type = 'info') {
-            document.querySelectorAll('.toast').forEach(toast => toast.remove());
-
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <i class="fas fa-${this.getToastIcon(type)} mr-3"></i>
-                        <span>${message}</span>
-                    </div>
-                    <button class="ml-4 text-white hover:text-gray-200 transition-colors" onclick="this.parentElement.parentElement.remove()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-
-            document.body.appendChild(toast);
-            requestAnimationFrame(() => toast.classList.add('show'));
-
-            setTimeout(() => {
-                if (toast.parentElement) {
-                    toast.classList.remove('show');
-                    setTimeout(() => toast.remove(), 400);
-                }
-            }, 5000);
-        }
-
-        getToastIcon(type) {
-            const icons = {
-                success: 'check-circle',
-                error: 'exclamation-circle',
-                warning: 'exclamation-triangle',
-                info: 'info-circle'
-            };
-            return icons[type] || 'info-circle';
-        }
-
-        showModal(title, content, buttons = []) {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-sm';
-            
-            const defaultButtons = buttons.length > 0 ? buttons : [
-                { text: 'Close', action: () => modal.remove(), class: 'btn-secondary' }
-            ];
-
-            modal.innerHTML = `
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
-                    <div class="p-8 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900 dark:to-indigo-900">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">${title}</h3>
-                            <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all" onclick="this.closest('.fixed').remove()">
-                                <i class="fas fa-times text-xl"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-8 max-h-96 overflow-y-auto">
-                        ${content}
-                    </div>
-                    <div class="p-8 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 flex justify-end space-x-4">
-                        ${defaultButtons.map(btn => 
-                            `<button class="${btn.class || 'btn-primary'} px-6 py-3" onclick="(${btn.action.toString()})(); this.closest('.fixed').remove();">${btn.text}</button>`
-                        ).join('')}
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            return modal;
-        }
-
-        showUserManagementModal() {
-            const content = `
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
-                        <input type="text" class="input-field" placeholder="Enter full name" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
-                        <input type="email" class="input-field" placeholder="user@udom.ac.tz" required>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Role</label>
-                            <select class="input-field">
-                                <option>Student</option>
-                                <option>Lecturer</option>
-                                <option>Administrator</option>
-                                <option>Subject Expert</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Department</label>
-                            <select class="input-field">
-                                <option>Computer Science</option>
-                                <option>Mathematics</option>
-                                <option>Engineering</option>
-                                <option>Agriculture</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            this.showModal('Add New User', content, [
-                { text: 'Cancel', action: () => {}, class: 'btn-secondary' },
-                { text: 'Create User', action: () => this.createUser(), class: 'btn-primary' }
-            ]);
-        }
-
-        createUser() {
-            this.showSecureToast('User account created successfully', 'success');
-        }
-
-        showCourseCreationModal() {
-            this.showSecureToast('Course creation modal will be implemented', 'info');
-        }
-
-        showBroadcastModal() {
-            this.showSecureToast('Broadcast message modal will be implemented', 'info');
-        }
-
-        handleSessionExpiry() {
-            console.warn('⚠️ Session expired');
-            this.updateSecurityIndicator('error', 'Session Expired');
-
-            this.showSecurityModal(
-                'Session Expired',
-                'Your administrator session has expired for security reasons. Please log in again to continue.',
-                () => {
-                    this.performSecureLogout();
-                }
-            );
-        }
-    }
-
-    // Initialize the dashboard when DOM is loaded
-    document.addEventListener('DOMContentLoaded', () => {
-        window.adminDashboard = new AdminDashboard();
-        window.adminDashboard.initialize().catch(error => {
-            console.error('Failed to initialize dashboard:', error);
         });
-    });
 
-    // Global error handler
-    window.addEventListener('error', (event) => {
-        console.error('Global error caught:', event.error);
-        if (window.adminDashboard) {
-            window.adminDashboard.updateSecurityIndicator('warning', 'System Warning');
-        }
-    });
+        // Global error handler
+        window.addEventListener('error', (event) => {
+            console.error('Global error caught:', event.error);
+            if (window.adminDashboard) {
+                window.adminDashboard.updateSecurityIndicator('warning', 'System Warning');
+            }
+        });
 
-    console.log('🎯 Professional Administrator Dashboard script loaded');
+        console.log('🎯 Professional Administrator Dashboard script loaded');
         </script>
 </body>
 
